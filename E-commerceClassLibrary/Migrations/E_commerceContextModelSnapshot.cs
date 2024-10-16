@@ -22,7 +22,7 @@ namespace E_commerceClassLibrary.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Production.Brand", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Production.Brand", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,7 +50,7 @@ namespace E_commerceClassLibrary.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Production.Category", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Production.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -78,7 +78,7 @@ namespace E_commerceClassLibrary.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Production.Color", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Production.Color", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -106,7 +106,7 @@ namespace E_commerceClassLibrary.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Production.Product", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Production.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -134,9 +134,6 @@ namespace E_commerceClassLibrary.Migrations
                     b.Property<int>("SizeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StockId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
@@ -150,10 +147,6 @@ namespace E_commerceClassLibrary.Migrations
 
                     b.HasIndex("SizeId");
 
-                    b.HasIndex("StockId")
-                        .IsUnique()
-                        .HasFilter("[StockId] IS NOT NULL");
-
                     b.ToTable("Products");
 
                     b.HasData(
@@ -165,12 +158,11 @@ namespace E_commerceClassLibrary.Migrations
                             ColorId = 1,
                             Name = "Product 1",
                             Price = 1499.99m,
-                            SizeId = 1,
-                            StockId = 1
+                            SizeId = 1
                         });
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Production.Size", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Production.Size", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -198,7 +190,7 @@ namespace E_commerceClassLibrary.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Production.Stock", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Production.Stock", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -214,7 +206,9 @@ namespace E_commerceClassLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId")
+                        .IsUnique()
+                        .HasFilter("[ProductId] IS NOT NULL");
 
                     b.ToTable("Stocks");
 
@@ -227,7 +221,7 @@ namespace E_commerceClassLibrary.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Sales.CartItem", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Sales.CartItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -262,7 +256,7 @@ namespace E_commerceClassLibrary.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Sales.Customer", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Sales.Customer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -323,7 +317,7 @@ namespace E_commerceClassLibrary.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Sales.Order", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Sales.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -359,13 +353,13 @@ namespace E_commerceClassLibrary.Migrations
                         {
                             Id = 1,
                             CustomerId = 1,
-                            OrderDate = new DateTime(2024, 10, 16, 1, 22, 45, 3, DateTimeKind.Local).AddTicks(4463),
+                            OrderDate = new DateTime(2024, 10, 16, 15, 23, 55, 50, DateTimeKind.Local).AddTicks(2398),
                             OrderStatus = "Pending",
                             TotalPrice = 1499.99m
                         });
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Sales.OrderStaffAssignment", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Sales.OrderStaffAssignment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -396,7 +390,7 @@ namespace E_commerceClassLibrary.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Sales.Staff", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Sales.Staff", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -445,35 +439,31 @@ namespace E_commerceClassLibrary.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Production.Product", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Production.Product", b =>
                 {
-                    b.HasOne("WebbShopClassLibrary.Models.Production.Brand", "Brand")
+                    b.HasOne("E_commerceClassLibrary.Models.Production.Brand", "Brand")
                         .WithMany("Products")
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebbShopClassLibrary.Models.Production.Category", "Category")
+                    b.HasOne("E_commerceClassLibrary.Models.Production.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebbShopClassLibrary.Models.Production.Color", "Color")
+                    b.HasOne("E_commerceClassLibrary.Models.Production.Color", "Color")
                         .WithMany("Products")
                         .HasForeignKey("ColorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebbShopClassLibrary.Models.Production.Size", "Size")
+                    b.HasOne("E_commerceClassLibrary.Models.Production.Size", "Size")
                         .WithMany("Products")
                         .HasForeignKey("SizeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("WebbShopClassLibrary.Models.Production.Stock", "Stock")
-                        .WithOne("Product")
-                        .HasForeignKey("WebbShopClassLibrary.Models.Production.Product", "StockId");
 
                     b.Navigation("Brand");
 
@@ -482,17 +472,24 @@ namespace E_commerceClassLibrary.Migrations
                     b.Navigation("Color");
 
                     b.Navigation("Size");
-
-                    b.Navigation("Stock");
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Sales.CartItem", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Production.Stock", b =>
                 {
-                    b.HasOne("WebbShopClassLibrary.Models.Sales.Order", "Order")
+                    b.HasOne("E_commerceClassLibrary.Models.Production.Product", "Product")
+                        .WithOne("Stock")
+                        .HasForeignKey("E_commerceClassLibrary.Models.Production.Stock", "ProductId");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Sales.CartItem", b =>
+                {
+                    b.HasOne("E_commerceClassLibrary.Models.Sales.Order", "Order")
                         .WithMany("CartItems")
                         .HasForeignKey("OrderId");
 
-                    b.HasOne("WebbShopClassLibrary.Models.Production.Product", "Product")
+                    b.HasOne("E_commerceClassLibrary.Models.Production.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -503,9 +500,9 @@ namespace E_commerceClassLibrary.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Sales.Order", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Sales.Order", b =>
                 {
-                    b.HasOne("WebbShopClassLibrary.Models.Sales.Customer", "Customer")
+                    b.HasOne("E_commerceClassLibrary.Models.Sales.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -514,15 +511,15 @@ namespace E_commerceClassLibrary.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Sales.OrderStaffAssignment", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Sales.OrderStaffAssignment", b =>
                 {
-                    b.HasOne("WebbShopClassLibrary.Models.Sales.Order", "Order")
+                    b.HasOne("E_commerceClassLibrary.Models.Sales.Order", "Order")
                         .WithMany("OrderStaffAssignments")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebbShopClassLibrary.Models.Sales.Staff", "Staff")
+                    b.HasOne("E_commerceClassLibrary.Models.Sales.Staff", "Staff")
                         .WithMany("OrderStaffAssignments")
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -533,44 +530,44 @@ namespace E_commerceClassLibrary.Migrations
                     b.Navigation("Staff");
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Production.Brand", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Production.Brand", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Production.Category", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Production.Category", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Production.Color", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Production.Color", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Production.Size", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Production.Product", b =>
+                {
+                    b.Navigation("Stock");
+                });
+
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Production.Size", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Production.Stock", b =>
-                {
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Sales.Customer", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Sales.Customer", b =>
                 {
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Sales.Order", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Sales.Order", b =>
                 {
                     b.Navigation("CartItems");
 
                     b.Navigation("OrderStaffAssignments");
                 });
 
-            modelBuilder.Entity("WebbShopClassLibrary.Models.Sales.Staff", b =>
+            modelBuilder.Entity("E_commerceClassLibrary.Models.Sales.Staff", b =>
                 {
                     b.Navigation("OrderStaffAssignments");
                 });

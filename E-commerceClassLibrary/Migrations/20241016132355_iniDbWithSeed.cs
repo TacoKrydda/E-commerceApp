@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace E_commerceClassLibrary.Migrations
 {
     /// <inheritdoc />
-    public partial class iniDBWithData : Migration
+    public partial class iniDbWithSeed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -98,20 +98,6 @@ namespace E_commerceClassLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Stocks",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductId = table.Column<int>(type: "int", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Stocks", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -145,7 +131,6 @@ namespace E_commerceClassLibrary.Migrations
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     ColorId = table.Column<int>(type: "int", nullable: false),
                     SizeId = table.Column<int>(type: "int", nullable: false),
-                    StockId = table.Column<int>(type: "int", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
@@ -175,11 +160,6 @@ namespace E_commerceClassLibrary.Migrations
                         principalTable: "Sizes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Products_Stocks_StockId",
-                        column: x => x.StockId,
-                        principalTable: "Stocks",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -234,6 +214,25 @@ namespace E_commerceClassLibrary.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Stocks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Stocks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Stocks_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.InsertData(
                 table: "Brands",
                 columns: new[] { "Id", "Name" },
@@ -265,19 +264,14 @@ namespace E_commerceClassLibrary.Migrations
                 values: new object[] { 1, "anna.smith@example.com", "Anna", "Smith", "9876543210" });
 
             migrationBuilder.InsertData(
-                table: "Stocks",
-                columns: new[] { "Id", "ProductId", "Quantity" },
-                values: new object[] { 1, 1, 100 });
-
-            migrationBuilder.InsertData(
                 table: "Orders",
                 columns: new[] { "Id", "CustomerId", "OrderDate", "OrderStatus", "ShippedDate", "TotalPrice" },
-                values: new object[] { 1, 1, new DateTime(2024, 10, 16, 1, 22, 45, 3, DateTimeKind.Local).AddTicks(4463), "Pending", null, 1499.99m });
+                values: new object[] { 1, 1, new DateTime(2024, 10, 16, 15, 23, 55, 50, DateTimeKind.Local).AddTicks(2398), "Pending", null, 1499.99m });
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "Id", "BrandId", "CategoryId", "ColorId", "Name", "Price", "SizeId", "StockId" },
-                values: new object[] { 1, 1, 1, 1, "Product 1", 1499.99m, 1, 1 });
+                columns: new[] { "Id", "BrandId", "CategoryId", "ColorId", "Name", "Price", "SizeId" },
+                values: new object[] { 1, 1, 1, 1, "Product 1", 1499.99m, 1 });
 
             migrationBuilder.InsertData(
                 table: "CartItems",
@@ -288,6 +282,11 @@ namespace E_commerceClassLibrary.Migrations
                 table: "OrderStaffAssignments",
                 columns: new[] { "Id", "OrderId", "StaffId" },
                 values: new object[] { 1, 1, 1 });
+
+            migrationBuilder.InsertData(
+                table: "Stocks",
+                columns: new[] { "Id", "ProductId", "Quantity" },
+                values: new object[] { 1, 1, 100 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Brands_Name",
@@ -371,13 +370,6 @@ namespace E_commerceClassLibrary.Migrations
                 column: "SizeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_StockId",
-                table: "Products",
-                column: "StockId",
-                unique: true,
-                filter: "[StockId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Sizes_Name",
                 table: "Sizes",
                 column: "Name",
@@ -398,7 +390,9 @@ namespace E_commerceClassLibrary.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Stocks_ProductId",
                 table: "Stocks",
-                column: "ProductId");
+                column: "ProductId",
+                unique: true,
+                filter: "[ProductId] IS NOT NULL");
         }
 
         /// <inheritdoc />
@@ -411,13 +405,19 @@ namespace E_commerceClassLibrary.Migrations
                 name: "OrderStaffAssignments");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Stocks");
 
             migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Staff");
+
+            migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "Brands");
@@ -430,12 +430,6 @@ namespace E_commerceClassLibrary.Migrations
 
             migrationBuilder.DropTable(
                 name: "Sizes");
-
-            migrationBuilder.DropTable(
-                name: "Stocks");
-
-            migrationBuilder.DropTable(
-                name: "Customers");
         }
     }
 }

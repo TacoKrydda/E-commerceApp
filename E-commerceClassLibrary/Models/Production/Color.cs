@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace WebbShopClassLibrary.Models.Production
+namespace E_commerceClassLibrary.Models.Production
 {
     public class Color
     {

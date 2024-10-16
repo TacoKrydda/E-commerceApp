@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WebbShopClassLibrary.Models.Production;
-using WebbShopClassLibrary.Models.Sales;
+﻿using E_commerceClassLibrary.Models.Production;
+using E_commerceClassLibrary.Models.Sales;
+using Microsoft.EntityFrameworkCore;
 
 
 
@@ -64,10 +64,10 @@ namespace E_commerceClassLibrary.Context
                 .WithMany(s => s.Products)
                 .HasForeignKey(p => p.SizeId);
 
-            modelBuilder.Entity<Product>()
-                .HasOne(p => p.Stock)
-                .WithOne(s => s.Product)
-                .HasForeignKey<Product>(p => p.StockId);
+            modelBuilder.Entity<Stock>()
+                .HasOne(s => s.Product)
+                .WithOne(p => p.Stock)
+                .HasForeignKey<Stock>(s => s.ProductId);
             #endregion
 
             #region Sales
@@ -259,9 +259,6 @@ namespace E_commerceClassLibrary.Context
             modelBuilder.Entity<Product>()
                 .HasIndex(p => p.SizeId);
 
-            modelBuilder.Entity<Product>()
-                .HasIndex(s => s.StockId);
-
             modelBuilder.Entity<Stock>()
                 .HasIndex(s => s.ProductId);
 
@@ -330,7 +327,6 @@ namespace E_commerceClassLibrary.Context
                     CategoryId = 1,
                     ColorId = 1,
                     SizeId = 1,
-                    StockId = 1,
                     Price = 1499.99m
                 });
 

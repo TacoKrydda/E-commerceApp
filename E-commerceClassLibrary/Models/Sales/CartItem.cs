@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using WebbShopClassLibrary.Models.Production;
+﻿using E_commerceClassLibrary.Models.Production;
+using System.Text.Json.Serialization;
 
-namespace WebbShopClassLibrary.Models.Sales
+namespace E_commerceClassLibrary.Models.Sales
 {
     public class CartItem
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace WebbShopClassLibrary.Models.Sales
+namespace E_commerceClassLibrary.Models.Sales
 {
     public class Customer
     {

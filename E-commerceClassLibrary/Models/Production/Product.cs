@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace WebbShopClassLibrary.Models.Production
+namespace E_commerceClassLibrary.Models.Production
 {
     public class Product
     {
@@ -12,7 +12,6 @@ namespace WebbShopClassLibrary.Models.Production
         public int CategoryId { get; set; }
         public int ColorId { get; set; }
         public int SizeId { get; set; }
-        public int? StockId { get; set; }
         public decimal Price
         {
             get { return _price; }
