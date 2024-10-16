@@ -1,4 +1,6 @@
 using E_commerceClassLibrary.Context;
+using E_commerceClassLibrary.Interfaces.Production;
+using E_commerceClassLibrary.Services.Production;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<E_commerceContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
+builder.Services.AddScoped<IBrandService, BrandService>();
 
 var app = builder.Build();
 

@@ -15,4 +15,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTO\Sales\" />
+    <Folder Include="Interfaces\Sales\" />
+    <Folder Include="Services\Sales\" />
+  </ItemGroup>
+
 </Project>
