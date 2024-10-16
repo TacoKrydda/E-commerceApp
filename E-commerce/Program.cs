@@ -16,6 +16,10 @@ builder.Services.AddDbContext<E_commerceContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IBrandService, BrandService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IColorService, ColorService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ISizeService, SizeService>();
 
 var app = builder.Build();
 
