@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<E_commerceContext>(options =>
+builder.Services.AddDbContext<EcommerceContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IBrandService, BrandService>();
@@ -20,6 +20,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IColorService, ColorService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ISizeService, SizeService>();
+builder.Services.AddScoped<IStockService, StockService>();
 
 var app = builder.Build();
 

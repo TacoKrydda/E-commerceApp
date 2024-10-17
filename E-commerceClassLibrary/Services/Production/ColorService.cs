@@ -10,9 +10,9 @@ namespace E_commerceClassLibrary.Services.Production
 {
     public class ColorService : IColorService
     {
-        private readonly E_commerceContext _context;
+        private readonly EcommerceContext _context;
         private readonly ILogger<ColorService> _logger;
-        public ColorService(E_commerceContext context, ILogger<ColorService> logger)
+        public ColorService(EcommerceContext context, ILogger<ColorService> logger)
         {
             _context = context;
             _logger = logger;

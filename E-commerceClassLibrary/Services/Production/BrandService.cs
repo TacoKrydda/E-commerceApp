@@ -10,9 +10,9 @@ namespace E_commerceClassLibrary.Services.Production
 {
     public class BrandService : IBrandService
     {
-        private readonly E_commerceContext _context;
+        private readonly EcommerceContext _context;
         private readonly ILogger<BrandService> _logger;
-        public BrandService(E_commerceContext context, ILogger<BrandService> logger)
+        public BrandService(EcommerceContext context, ILogger<BrandService> logger)
         {
             _context = context;
             _logger = logger;

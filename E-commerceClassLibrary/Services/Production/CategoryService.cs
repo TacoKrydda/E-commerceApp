@@ -10,9 +10,9 @@ namespace E_commerceClassLibrary.Services.Production
 {
     public class CategoryService : ICategoryService
     {
-        private readonly E_commerceContext _context;
+        private readonly EcommerceContext _context;
         private readonly ILogger<CategoryService> _logger;
-        public CategoryService(E_commerceContext context, ILogger<CategoryService> logger)
+        public CategoryService(EcommerceContext context, ILogger<CategoryService> logger)
         {
             _context = context;
             _logger = logger;

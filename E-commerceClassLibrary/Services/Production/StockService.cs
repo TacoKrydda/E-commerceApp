@@ -8,39 +8,53 @@ using System.Data.Common;
 
 namespace E_commerceClassLibrary.Services.Production
 {
-    public class SizeService : ISizeService
+    public class StockService : IStockService
     {
         private readonly EcommerceContext _context;
-        private readonly ILogger<SizeService> _logger;
-        public SizeService(EcommerceContext context, ILogger<SizeService> logger)
+        private readonly ILogger<StockService> _logger;
+        public StockService(EcommerceContext context, ILogger<StockService> logger)
         {
             _context = context;
             _logger = logger;
         }
-        public async Task<SizeDTO> CreateSizeAsync(SizeDTO size)
+
+        public async Task<StockDTO> CreateStockAsync(CreateUpdateStockDTO stock)
         {
-            if (size == null || string.IsNullOrWhiteSpace(size.Name))
+            if (stock == null)
             {
                 _logger.LogWarning("Invalid entity data provided.");
                 throw new ArgumentException("Entity data is invalid.");
             }
 
-            if (await EntityExistsAsync(size.Name))
+            if (stock.Quantity < 0)
             {
-                _logger.LogWarning("An Entity with the same name already exists: {EntityName}", size.Name);
-                throw new InvalidOperationException("An entity with the same name already exists.");
+                _logger.LogWarning("Invalid stock quantity {Quantity}", stock.Quantity);
+                throw new ArgumentException("Stock quantity cannot be negative.");
             }
 
-            var entity = new Size
+            if (await EntityExistsAsync(stock.ProductId))
             {
-                Name = size.Name
+                _logger.LogWarning("A stock with the same productId already exists: {productId}", stock.ProductId);
+                throw new InvalidOperationException("A stock with the same productId already exists.");
+            }
+
+            var entity = new Stock
+            {
+                ProductId = stock.ProductId,
+                Quantity = stock.Quantity,
             };
 
             try
             {
-                await _context.Sizes.AddAsync(entity);
+                await _context.Stocks.AddAsync(entity);
                 await _context.SaveChangesAsync();
-                return new SizeDTO { Id = entity.Id, Name = entity.Name };
+
+                return new StockDTO
+                {
+                    Id = entity.Id,
+                    Product = (await _context.Stocks.FindAsync(entity.ProductId))?.Product?.Name ?? string.Empty,
+                    Quantity = entity.Quantity,
+                };
             }
             catch (DbUpdateException ex)
             {
@@ -49,7 +63,7 @@ namespace E_commerceClassLibrary.Services.Production
             }
         }
 
-        public async Task DeleteSizeAsync(int id)
+        public async Task DeleteStockAsync(int id)
         {
             if (id <= 0)
             {
@@ -58,14 +72,14 @@ namespace E_commerceClassLibrary.Services.Production
 
             try
             {
-                var entity = await _context.Sizes.FindAsync(id);
+                var entity = await _context.Stocks.FindAsync(id);
                 if (entity == null)
                 {
                     _logger.LogWarning("Entity with ID {Id} not found.", id);
                     throw new KeyNotFoundException($"Entity with ID {id} not found.");
                 }
 
-                _context.Sizes.Remove(entity);
+                _context.Stocks.Remove(entity);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException ex)
@@ -75,12 +89,12 @@ namespace E_commerceClassLibrary.Services.Production
             }
         }
 
-        public async Task<bool> EntityExistsAsync(string name)
+        public async Task<bool> EntityExistsAsync(int productId)
         {
-            return await _context.Sizes.AnyAsync(b => b.Name == name);
+            return await _context.Stocks.AnyAsync(s => s.ProductId == productId);
         }
 
-        public async Task<SizeDTO> GetSizeByIdAsync(int id)
+        public async Task<StockDTO> GetStockByIdAsync(int id)
         {
             if (id <= 0)
             {
@@ -89,14 +103,22 @@ namespace E_commerceClassLibrary.Services.Production
 
             try
             {
-                var entity = await _context.Sizes.FirstOrDefaultAsync(b => b.Id == id);
+                var entity = await _context.Stocks
+                    .Include(s => s.Product)
+                    .FirstOrDefaultAsync(s => s.Id == id);
 
                 if (entity == null)
                 {
                     _logger.LogWarning("Entity with ID {Id} not found.", id);
                     throw new KeyNotFoundException($"Entity with ID {id} not found.");
                 }
-                return new SizeDTO { Id = entity.Id, Name = entity.Name, };
+                return new StockDTO
+                {
+                    Id = entity.Id,
+                    Product = entity.Product?.Name ?? string.Empty,
+                    Quantity = entity.Quantity,
+
+                };
             }
             catch (DbException ex)
             {
@@ -105,16 +127,19 @@ namespace E_commerceClassLibrary.Services.Production
             }
         }
 
-        public async Task<IEnumerable<SizeDTO>> GetSizesAsync()
+        public async Task<IEnumerable<StockDTO>> GetStocksAsync()
         {
             try
             {
-                var entity = await _context.Sizes.ToListAsync();
+                var entity = await _context.Stocks
+                    .Include(s => s.Product)
+                    .ToListAsync();
 
-                return entity.Select(b => new SizeDTO
+                return entity.Select(s => new StockDTO
                 {
-                    Id = b.Id,
-                    Name = b.Name,
+                    Id = s.Id,
+                    Product = s.Product?.Name ?? string.Empty,
+                    Quantity = s.Quantity,
                 }).ToList();
             }
             catch (DbException ex)
@@ -124,25 +149,42 @@ namespace E_commerceClassLibrary.Services.Production
             }
         }
 
-        public async Task<SizeDTO> UpdateSizeAsync(int id, SizeDTO size)
+        public async Task<StockDTO> UpdateStockAsync(int id, CreateUpdateStockDTO stock)
         {
             if (id <= 0)
             {
                 throw new ArgumentException("Invalid ID value", nameof(id));
             }
 
+            if (stock.Quantity < 0)
+            {
+                _logger.LogWarning("Invalid stock quantity for stock ID {Id}", id);
+                throw new ArgumentException("Stock quantity cannot be negative.");
+            }
+
             try
             {
-                var existingEntity = await _context.Sizes.FindAsync(id);
+                var existingEntity = await _context.Stocks
+                    .Include(s => s.Product)
+                    .FirstOrDefaultAsync(s => s.Id == id);
+
                 if (existingEntity == null)
                 {
                     _logger.LogWarning("Entity with ID {Id} not found.", id);
                     throw new KeyNotFoundException($"Entity with ID {id} not found.");
                 }
 
-                existingEntity.Name = size.Name;
+                existingEntity.ProductId = stock.ProductId;
+                existingEntity.Quantity = stock.Quantity;
+
+
                 await _context.SaveChangesAsync();
-                return new SizeDTO { Id = existingEntity.Id, Name = existingEntity.Name };
+                return new StockDTO
+                {
+                    Id = existingEntity.Id,
+                    Product = existingEntity.Product?.Name ?? string.Empty,
+                    Quantity = existingEntity.Quantity,
+                };
             }
             catch (DbUpdateException ex)
             {

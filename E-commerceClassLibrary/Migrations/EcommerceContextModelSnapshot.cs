@@ -4,19 +4,16 @@ using E_commerceClassLibrary.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
 namespace E_commerceClassLibrary.Migrations
 {
-    [DbContext(typeof(E_commerceContext))]
-    [Migration("20241016132355_iniDbWithSeed")]
-    partial class iniDbWithSeed
+    [DbContext(typeof(EcommerceContext))]
+    partial class EcommerceContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,10 +142,10 @@ namespace E_commerceClassLibrary.Migrations
 
                     b.HasIndex("ColorId");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.HasIndex("SizeId");
+
+                    b.HasIndex("Name", "BrandId")
+                        .IsUnique();
 
                     b.ToTable("Products");
 
@@ -356,7 +353,7 @@ namespace E_commerceClassLibrary.Migrations
                         {
                             Id = 1,
                             CustomerId = 1,
-                            OrderDate = new DateTime(2024, 10, 16, 15, 23, 55, 50, DateTimeKind.Local).AddTicks(2398),
+                            OrderDate = new DateTime(2024, 10, 17, 17, 5, 6, 671, DateTimeKind.Local).AddTicks(7153),
                             OrderStatus = "Pending",
                             TotalPrice = 1499.99m
                         });

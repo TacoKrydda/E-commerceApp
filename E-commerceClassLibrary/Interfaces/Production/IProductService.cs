@@ -9,6 +9,6 @@ namespace E_commerceClassLibrary.Interfaces.Production
         Task<ProductDTO> GetProductByIdAsync(int id);
         Task<IEnumerable<ProductDTO>> GetProductsAsync();
         Task<ProductDTO> UpdateProductAsync(int id, CreateUpdateProductDTO product);
-        Task<bool> EntityExistsAsync(string name);
+        Task<bool> EntityExistsAsync(string name, int brandId);
     }
 }

@@ -10,9 +10,9 @@ namespace E_commerceClassLibrary.Services.Production
 {
     public class ProductService : IProductService
     {
-        private readonly E_commerceContext _context;
+        private readonly EcommerceContext _context;
         private readonly ILogger<ProductService> _logger;
-        public ProductService(E_commerceContext context, ILogger<ProductService> logger)
+        public ProductService(EcommerceContext context, ILogger<ProductService> logger)
         {
             _context = context;
             _logger = logger;
@@ -25,11 +25,13 @@ namespace E_commerceClassLibrary.Services.Production
                 throw new ArgumentException("Entity data is invalid.");
             }
 
-            if (await EntityExistsAsync(product.Name))
+            if (await EntityExistsAsync(product.Name, product.BrandId))
             {
-                _logger.LogWarning("An Entity with the same name already exists: {EntityName}", product.Name);
-                throw new InvalidOperationException("An entity with the same name already exists.");
+                _logger.LogWarning("A product with the same name and brand already exists: {ProductName}, {BrandId}", product.Name, product.BrandId);
+                throw new InvalidOperationException("A product with the same name and brand already exists.");
             }
+
+            //using var transaction = await _context.Database.BeginTransactionAsync(); // Startar transaktionen
 
             var entity = new Product
             {
@@ -38,13 +40,16 @@ namespace E_commerceClassLibrary.Services.Production
                 CategoryId = product.CategoryId,
                 ColorId = product.ColorId,
                 SizeId = product.SizeId,
-                Price = product.Price
+                Price = product.Price,
             };
 
             try
             {
                 await _context.Products.AddAsync(entity);
                 await _context.SaveChangesAsync();
+
+                //await transaction.CommitAsync(); // Bekräfta transaktionen
+
                 return new ProductDTO
                 {
                     Id = entity.Id,
@@ -54,11 +59,12 @@ namespace E_commerceClassLibrary.Services.Production
                     Color = (await _context.Colors.FindAsync(entity.ColorId))?.Name ?? string.Empty,
                     Size = (await _context.Sizes.FindAsync(entity.SizeId))?.Name ?? string.Empty,
                     Price = entity.Price,
-                    Stock = 0
+                    Stock = (await _context.Stocks.FindAsync(entity.Id))?.Quantity ?? 0,
                 };
             }
             catch (DbUpdateException ex)
             {
+                //await transaction.RollbackAsync(); // Rulla tillbaka om något går fel
                 _logger.LogError(ex, "An error occurred while adding the entity.");
                 throw new InvalidOperationException("An error occurred while adding the entity.", ex);
             }
@@ -90,9 +96,9 @@ namespace E_commerceClassLibrary.Services.Production
             }
         }
 
-        public async Task<bool> EntityExistsAsync(string name)
+        public async Task<bool> EntityExistsAsync(string name, int brandId)
         {
-            return await _context.Products.AnyAsync(b => b.Name == name);
+            return await _context.Products.AnyAsync(p => p.Name == name && p.BrandId == brandId);
         }
 
         public async Task<ProductDTO> GetProductByIdAsync(int id)
@@ -109,6 +115,7 @@ namespace E_commerceClassLibrary.Services.Production
                     .Include(p => p.Category)
                     .Include(p => p.Color)
                     .Include(p => p.Size)
+                    .Include(p => p.Stock)
                     .FirstOrDefaultAsync(p => p.Id == id);
 
                 if (entity == null)
@@ -125,7 +132,7 @@ namespace E_commerceClassLibrary.Services.Production
                     Color = entity.Color?.Name ?? string.Empty,
                     Size = entity.Size?.Name ?? string.Empty,
                     Price = entity.Price,
-                    Stock = 0
+                    Stock = (await _context.Stocks.FindAsync(entity.Id))?.Quantity ?? 0,
                 };
             }
             catch (DbException ex)
@@ -144,6 +151,7 @@ namespace E_commerceClassLibrary.Services.Production
                     .Include(p => p.Category)
                     .Include(p => p.Color)
                     .Include(p => p.Size)
+                    .Include(p => p.Stock)
                     .ToListAsync();
 
                 return entity.Select(p => new ProductDTO
@@ -196,13 +204,13 @@ namespace E_commerceClassLibrary.Services.Production
                 existingEntity.Price = product.Price;
                 if (existingEntity.Stock != null)
                 {
-                    if (product.Stock < 0)
+                    if (product.StockId < 0)
                     {
                         _logger.LogWarning("Invalid stock quantity for product ID {Id}", id);
                         throw new ArgumentException("Stock quantity cannot be negative.");
                     }
 
-                    existingEntity.Stock.Quantity = product.Stock;
+                    existingEntity.Stock.Quantity = product.StockId;
                 }
                 else
                 {
@@ -210,7 +218,7 @@ namespace E_commerceClassLibrary.Services.Production
                     existingEntity.Stock = new Stock
                     {
                         ProductId = existingEntity.Id,
-                        Quantity = product.Stock
+                        Quantity = product.StockId
                     };
                 }
 
