@@ -1,47 +1,64 @@
-﻿using E_commerceClassLibrary.Context;
-using E_commerceClassLibrary.DTO.Production;
-using E_commerceClassLibrary.Interfaces.Production;
-using E_commerceClassLibrary.Models.Production;
+﻿using AutoMapper;
+using E_commerceClassLibrary.Context;
+using E_commerceClassLibrary.DTO.Sales;
+using E_commerceClassLibrary.Interfaces.Sales;
+using E_commerceClassLibrary.Models.Sales;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Data.Common;
 
-namespace E_commerceClassLibrary.Services.Production
+namespace E_commerceClassLibrary.Services.Sales
 {
-    public class ColorService : IColorService
+    public class CustomerService : ICustomerService
     {
         private readonly EcommerceContext _context;
-        private readonly ILogger<ColorService> _logger;
-        public ColorService(EcommerceContext context, ILogger<ColorService> logger)
+        private readonly ILogger<CustomerService> _logger;
+        private readonly IMapper _mapper;
+        public CustomerService(EcommerceContext context, ILogger<CustomerService> logger, IMapper mapper)
         {
             _context = context;
             _logger = logger;
+            _mapper = mapper;
         }
 
-        public async Task<ColorDTO> CreateColorAsync(ColorDTO color)
+        public async Task<CustomerDTO> CreateCustomerAsync(CustomerDTO customer)
         {
-            if (color == null || string.IsNullOrWhiteSpace(color.Name))
+            if (customer == null || string.IsNullOrWhiteSpace(customer.Email))
             {
                 _logger.LogWarning("Invalid entity data provided.");
                 throw new ArgumentException("Entity data is invalid.");
             }
 
-            if (await EntityExistsAsync(color.Name))
+            if (await EntityExistsAsync(customer.Email))
             {
-                _logger.LogWarning("An Entity with the same name already exists: {EntityName}", color.Name);
-                throw new InvalidOperationException("An entity with the same name already exists.");
+                _logger.LogWarning("An Entity with the same mail already exists: {EntityMail}", customer.Email);
+                throw new InvalidOperationException("An entity with the same mail already exists.");
             }
 
-            var entity = new Color
+            var entity = new Customer
             {
-                Name = color.Name
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                Email = customer.Email,
+                Phone = customer.Phone,
+                Street = customer.Street,
+                City = customer.City,
             };
 
             try
             {
-                await _context.Colors.AddAsync(entity);
+                await _context.Customers.AddAsync(entity);
                 await _context.SaveChangesAsync();
-                return new ColorDTO { Id = entity.Id, Name = entity.Name };
+                return new CustomerDTO
+                {
+                    Id = entity.Id,
+                    FirstName = entity.FirstName,
+                    LastName = entity.LastName,
+                    Email = entity.Email,
+                    Phone = entity.Phone,
+                    Street = entity.Street,
+                    City = entity.City,
+                };
             }
             catch (DbUpdateException ex)
             {
@@ -50,7 +67,7 @@ namespace E_commerceClassLibrary.Services.Production
             }
         }
 
-        public async Task DeleteColorAsync(int id)
+        public async Task DeleteCustomerAsync(int id)
         {
             if (id <= 0)
             {
@@ -59,14 +76,14 @@ namespace E_commerceClassLibrary.Services.Production
 
             try
             {
-                var entity = await _context.Colors.FindAsync(id);
+                var entity = await _context.Customers.FindAsync(id);
                 if (entity == null)
                 {
                     _logger.LogWarning("Entity with ID {Id} not found.", id);
                     throw new KeyNotFoundException($"Entity with ID {id} not found.");
                 }
 
-                _context.Colors.Remove(entity);
+                _context.Customers.Remove(entity);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException ex)
@@ -76,12 +93,12 @@ namespace E_commerceClassLibrary.Services.Production
             }
         }
 
-        public async Task<bool> EntityExistsAsync(string name)
+        public async Task<bool> EntityExistsAsync(string email)
         {
-            return await _context.Colors.AnyAsync(c => c.Name == name);
+            return await _context.Customers.AnyAsync(c => c.Email == email);
         }
 
-        public async Task<ColorDTO> GetColorByIdAsync(int id)
+        public async Task<CustomerDTO> GetCustomerByIdAsync(int id)
         {
             if (id <= 0)
             {
@@ -90,14 +107,23 @@ namespace E_commerceClassLibrary.Services.Production
 
             try
             {
-                var entity = await _context.Colors.FirstOrDefaultAsync(c => c.Id == id);
+                var entity = await _context.Customers.FirstOrDefaultAsync(c => c.Id == id);
 
                 if (entity == null)
                 {
                     _logger.LogWarning("Entity with ID {Id} not found.", id);
                     throw new KeyNotFoundException($"Entity with ID {id} not found.");
                 }
-                return new ColorDTO { Id = entity.Id, Name = entity.Name, };
+                return new CustomerDTO
+                {
+                    Id = entity.Id,
+                    FirstName = entity.FirstName,
+                    LastName = entity.LastName,
+                    Email = entity.Email,
+                    Phone = entity.Phone,
+                    Street = entity.Street,
+                    City = entity.City,
+                };
             }
             catch (DbException ex)
             {
@@ -106,16 +132,21 @@ namespace E_commerceClassLibrary.Services.Production
             }
         }
 
-        public async Task<IEnumerable<ColorDTO>> GetColorsAsync()
+        public async Task<IEnumerable<CustomerDTO>> GetCustomersAsync()
         {
             try
             {
-                var entity = await _context.Categories.ToListAsync();
+                var entity = await _context.Customers.ToListAsync();
 
-                return entity.Select(c => new ColorDTO
+                return entity.Select(c => new CustomerDTO
                 {
                     Id = c.Id,
-                    Name = c.Name,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    Email = c.Email,
+                    Phone = c.Phone,
+                    Street = c.Street,
+                    City = c.City,
                 }).ToList();
             }
             catch (DbException ex)
@@ -125,7 +156,7 @@ namespace E_commerceClassLibrary.Services.Production
             }
         }
 
-        public async Task<ColorDTO> UpdateColorAsync(int id, ColorDTO color)
+        public async Task<CustomerDTO> UpdateCustomerAsync(int id, CreateUpdateCustomer customer)
         {
             if (id <= 0)
             {
@@ -134,16 +165,19 @@ namespace E_commerceClassLibrary.Services.Production
 
             try
             {
-                var existingEntity = await _context.Colors.FindAsync(id);
+                var existingEntity = await _context.Customers.FindAsync(id);
                 if (existingEntity == null)
                 {
                     _logger.LogWarning("Entity with ID {Id} not found.", id);
                     throw new KeyNotFoundException($"Entity with ID {id} not found.");
                 }
 
-                existingEntity.Name = color.Name;
+                // Map DTO to entity
+                _mapper.Map(customer, existingEntity);
+
                 await _context.SaveChangesAsync();
-                return new ColorDTO { Id = existingEntity.Id, Name = existingEntity.Name };
+                // Map entity back to DTO for return
+                return _mapper.Map<CustomerDTO>(existingEntity);
             }
             catch (DbUpdateException ex)
             {

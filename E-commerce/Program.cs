@@ -1,9 +1,14 @@
+using E_commerceClassLibrary.AutoMapper;
 using E_commerceClassLibrary.Context;
 using E_commerceClassLibrary.Interfaces.Production;
+using E_commerceClassLibrary.Interfaces.Sales;
 using E_commerceClassLibrary.Services.Production;
+using E_commerceClassLibrary.Services.Sales;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // Add services to the container.
 
@@ -21,6 +26,10 @@ builder.Services.AddScoped<IColorService, ColorService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ISizeService, SizeService>();
 builder.Services.AddScoped<IStockService, StockService>();
+
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+
+
 
 var app = builder.Build();
 

@@ -48,18 +48,26 @@ namespace E_commerceClassLibrary.Services.Production
                 await _context.Products.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
+                var stock = new Stock
+                {
+                    ProductId = entity.Id,
+                    Quantity = product.StockQuantity,
+                };
+                await _context.Stocks.AddAsync(stock);
+                await _context.SaveChangesAsync();
+
                 //await transaction.CommitAsync(); // Bekräfta transaktionen
 
                 return new ProductDTO
                 {
                     Id = entity.Id,
                     Name = entity.Name,
-                    Brand = (await _context.Brands.FindAsync(entity.BrandId))?.Name ?? string.Empty,
-                    Category = (await _context.Categories.FindAsync(entity.CategoryId))?.Name ?? string.Empty,
-                    Color = (await _context.Colors.FindAsync(entity.ColorId))?.Name ?? string.Empty,
-                    Size = (await _context.Sizes.FindAsync(entity.SizeId))?.Name ?? string.Empty,
+                    Brand = entity?.Brand?.Name ?? string.Empty,
+                    Category = entity?.Category?.Name ?? string.Empty,
+                    Color = entity?.Color?.Name ?? string.Empty,
+                    Size = entity?.Size?.Name ?? string.Empty,
                     Price = entity.Price,
-                    Stock = (await _context.Stocks.FindAsync(entity.Id))?.Quantity ?? 0,
+                    Stock = entity?.Stock?.Quantity ?? 0,
                 };
             }
             catch (DbUpdateException ex)
@@ -132,7 +140,7 @@ namespace E_commerceClassLibrary.Services.Production
                     Color = entity.Color?.Name ?? string.Empty,
                     Size = entity.Size?.Name ?? string.Empty,
                     Price = entity.Price,
-                    Stock = (await _context.Stocks.FindAsync(entity.Id))?.Quantity ?? 0,
+                    Stock = entity?.Stock?.Quantity ?? 0,
                 };
             }
             catch (DbException ex)
@@ -204,13 +212,13 @@ namespace E_commerceClassLibrary.Services.Production
                 existingEntity.Price = product.Price;
                 if (existingEntity.Stock != null)
                 {
-                    if (product.StockId < 0)
+                    if (product.StockQuantity < 0)
                     {
                         _logger.LogWarning("Invalid stock quantity for product ID {Id}", id);
                         throw new ArgumentException("Stock quantity cannot be negative.");
                     }
 
-                    existingEntity.Stock.Quantity = product.StockId;
+                    existingEntity.Stock.Quantity = product.StockQuantity;
                 }
                 else
                 {
@@ -218,7 +226,7 @@ namespace E_commerceClassLibrary.Services.Production
                     existingEntity.Stock = new Stock
                     {
                         ProductId = existingEntity.Id,
-                        Quantity = product.StockId
+                        Quantity = product.StockQuantity
                     };
                 }
 

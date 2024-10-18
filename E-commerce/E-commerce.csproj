@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Sales\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\E-commerceClassLibrary\E-commerceClassLibrary.csproj" />
   </ItemGroup>
 

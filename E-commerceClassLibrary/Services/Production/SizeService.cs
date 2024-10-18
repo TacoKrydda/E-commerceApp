@@ -77,7 +77,7 @@ namespace E_commerceClassLibrary.Services.Production
 
         public async Task<bool> EntityExistsAsync(string name)
         {
-            return await _context.Sizes.AnyAsync(b => b.Name == name);
+            return await _context.Sizes.AnyAsync(s => s.Name == name);
         }
 
         public async Task<SizeDTO> GetSizeByIdAsync(int id)
@@ -89,7 +89,7 @@ namespace E_commerceClassLibrary.Services.Production
 
             try
             {
-                var entity = await _context.Sizes.FirstOrDefaultAsync(b => b.Id == id);
+                var entity = await _context.Sizes.FirstOrDefaultAsync(s => s.Id == id);
 
                 if (entity == null)
                 {
@@ -111,10 +111,10 @@ namespace E_commerceClassLibrary.Services.Production
             {
                 var entity = await _context.Sizes.ToListAsync();
 
-                return entity.Select(b => new SizeDTO
+                return entity.Select(s => new SizeDTO
                 {
-                    Id = b.Id,
-                    Name = b.Name,
+                    Id = s.Id,
+                    Name = s.Name,
                 }).ToList();
             }
             catch (DbException ex)

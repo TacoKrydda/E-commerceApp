@@ -77,7 +77,7 @@ namespace E_commerceClassLibrary.Services.Production
 
         public async Task<bool> EntityExistsAsync(string name)
         {
-            return await _context.Categories.AnyAsync(b => b.Name == name);
+            return await _context.Categories.AnyAsync(c => c.Name == name);
         }
 
         public async Task<IEnumerable<CategoryDTO>> GetCategoriesAsync()
@@ -86,10 +86,10 @@ namespace E_commerceClassLibrary.Services.Production
             {
                 var entity = await _context.Categories.ToListAsync();
 
-                return entity.Select(b => new CategoryDTO
+                return entity.Select(c => new CategoryDTO
                 {
-                    Id = b.Id,
-                    Name = b.Name,
+                    Id = c.Id,
+                    Name = c.Name,
                 }).ToList();
             }
             catch (DbException ex)
@@ -108,7 +108,7 @@ namespace E_commerceClassLibrary.Services.Production
 
             try
             {
-                var entity = await _context.Categories.FirstOrDefaultAsync(b => b.Id == id);
+                var entity = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
 
                 if (entity == null)
                 {
