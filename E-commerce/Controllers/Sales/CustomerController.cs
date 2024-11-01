@@ -16,7 +16,7 @@ namespace E_commerce.Controllers.Sales
         }
 
         [HttpPost(Name = "PostCustomer")]
-        public async Task<ActionResult<CustomerDTO>> PostCustomerAsync(CustomerDTO customer)
+        public async Task<ActionResult<ReadCustomerDTO>> PostCustomerAsync([FromBody] CreateUpdateCustomerDTO customer)
         {
             var entity = await _service.CreateCustomerAsync(customer);
             return CreatedAtRoute("GetCustomerById", new { id = entity.Id }, entity);
@@ -37,7 +37,7 @@ namespace E_commerce.Controllers.Sales
         }
 
         [HttpGet("{id}", Name = "GetCustomerById")]
-        public async Task<ActionResult<CustomerDTO>> GetCustomerById(int id)
+        public async Task<ActionResult<ReadCustomerDTO>> GetCustomerById(int id)
         {
             var entity = await _service.GetCustomerByIdAsync(id);
             if (entity == null)
@@ -48,14 +48,14 @@ namespace E_commerce.Controllers.Sales
         }
 
         [HttpGet(Name = "GetCustomers")]
-        public async Task<ActionResult<IEnumerable<CustomerDTO>>> GetAllCustomersAsync()
+        public async Task<ActionResult<IEnumerable<ReadCustomerDTO>>> GetAllCustomersAsync()
         {
             var entities = await _service.GetCustomersAsync();
             return Ok(entities);
         }
 
         [HttpPut("{id}", Name = "PutCustomer")]
-        public async Task<IActionResult> PutCustomerAsync(int id, CreateUpdateCustomer customer)
+        public async Task<IActionResult> PutCustomerAsync(int id, [FromBody] CreateUpdateCustomerDTO customer)
         {
             var entity = await _service.UpdateCustomerAsync(id, customer);
             if (entity == null)

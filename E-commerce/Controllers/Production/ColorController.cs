@@ -15,7 +15,7 @@ namespace E_commerce.Controllers.Production
         }
 
         [HttpPost(Name = "PostColor")]
-        public async Task<ActionResult<ColorDTO>> PostColorAsync(ColorDTO color)
+        public async Task<ActionResult<ColorDTO>> PostColorAsync([FromBody] ColorDTO color)
         {
             var entity = await _service.CreateColorAsync(color);
             return CreatedAtRoute("GetColorById", new { id = entity.Id }, entity);
@@ -54,7 +54,7 @@ namespace E_commerce.Controllers.Production
         }
 
         [HttpPut("{id}", Name = "PutColor")]
-        public async Task<IActionResult> PutColorAsync(int id, ColorDTO color)
+        public async Task<IActionResult> PutColorAsync(int id, [FromBody] ColorDTO color)
         {
             var entity = await _service.UpdateColorAsync(id, color);
             if (entity == null)

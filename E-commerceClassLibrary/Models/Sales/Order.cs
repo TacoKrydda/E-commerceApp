@@ -24,7 +24,6 @@ namespace E_commerceClassLibrary.Models.Sales
             }
         }
 
-        //[JsonIgnore]
         public List<CartItem>? CartItems { get; set; } = new List<CartItem>();
         [JsonIgnore]
         public Customer? Customer { get; set; }

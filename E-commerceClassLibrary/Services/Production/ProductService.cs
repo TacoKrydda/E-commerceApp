@@ -58,16 +58,24 @@ namespace E_commerceClassLibrary.Services.Production
 
                 //await transaction.CommitAsync(); // Bekräfta transaktionen
 
+                var entityFromDb = await _context.Products
+                    .Include(p => p.Brand)
+                    .Include(p => p.Category)
+                    .Include(p => p.Color)
+                    .Include(p => p.Size)
+                    .Include(p => p.Stock)
+                    .FirstOrDefaultAsync(p => p.Id == entity.Id);
+
                 return new ProductDTO
                 {
-                    Id = entity.Id,
-                    Name = entity.Name,
-                    Brand = entity?.Brand?.Name ?? string.Empty,
-                    Category = entity?.Category?.Name ?? string.Empty,
-                    Color = entity?.Color?.Name ?? string.Empty,
-                    Size = entity?.Size?.Name ?? string.Empty,
-                    Price = entity.Price,
-                    Stock = entity?.Stock?.Quantity ?? 0,
+                    Id = entityFromDb.Id,
+                    Name = entityFromDb?.Name ?? string.Empty,
+                    Brand = entityFromDb?.Brand?.Name ?? string.Empty,
+                    Category = entityFromDb?.Category?.Name ?? string.Empty,
+                    Color = entityFromDb?.Color?.Name ?? string.Empty,
+                    Size = entityFromDb?.Size?.Name ?? string.Empty,
+                    Price = entityFromDb.Price,
+                    Stock = entityFromDb?.Stock?.Quantity ?? 0,
                 };
             }
             catch (DbUpdateException ex)

@@ -15,7 +15,7 @@ namespace E_commerce.Controllers.Production
         }
 
         [HttpPost(Name = "PostStock")]
-        public async Task<ActionResult<StockDTO>> PostStockAsync(CreateUpdateStockDTO Stock)
+        public async Task<ActionResult<StockDTO>> PostStockAsync([FromBody] CreateUpdateStockDTO Stock)
         {
             var entity = await _service.CreateStockAsync(Stock);
             return CreatedAtRoute("GetStockById", new { id = entity.Id }, entity);
@@ -54,7 +54,7 @@ namespace E_commerce.Controllers.Production
         }
 
         [HttpPut("{id}", Name = "PutStock")]
-        public async Task<IActionResult> PutStockAsync(int id, CreateUpdateStockDTO stock)
+        public async Task<IActionResult> PutStockAsync(int id, [FromBody] CreateUpdateStockDTO stock)
         {
             var entity = await _service.UpdateStockAsync(id, stock);
             if (entity == null)

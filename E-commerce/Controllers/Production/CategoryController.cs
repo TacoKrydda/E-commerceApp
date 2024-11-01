@@ -15,7 +15,7 @@ namespace E_commerce.Controllers.Production
         }
 
         [HttpPost(Name = "PostCategory")]
-        public async Task<ActionResult<CategoryDTO>> PostCategoryAsync(CategoryDTO category)
+        public async Task<ActionResult<CategoryDTO>> PostCategoryAsync([FromBody] CategoryDTO category)
         {
             var entity = await _service.CreateCategoryAsync(category);
             return CreatedAtRoute("GetCategoryById", new { id = entity.Id }, entity);
@@ -54,7 +54,7 @@ namespace E_commerce.Controllers.Production
         }
 
         [HttpPut("{id}", Name = "PutCategory")]
-        public async Task<IActionResult> PutCategoryAsync(int id, CategoryDTO category)
+        public async Task<IActionResult> PutCategoryAsync(int id, [FromBody] CategoryDTO category)
         {
             var entity = await _service.UpdateCategoryAsync(id, category);
             if (entity == null)

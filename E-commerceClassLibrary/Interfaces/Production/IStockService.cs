@@ -10,5 +10,6 @@ namespace E_commerceClassLibrary.Interfaces.Production
         Task<IEnumerable<StockDTO>> GetStocksAsync();
         Task<StockDTO> UpdateStockAsync(int id, CreateUpdateStockDTO stock);
         Task<bool> EntityExistsAsync(int productId);
+        Task AdjustStockAsync(int productId, int quantityChange);
     }
 }

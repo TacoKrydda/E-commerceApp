@@ -15,7 +15,7 @@ namespace E_commerce.Controllers.Production
         }
 
         [HttpPost(Name = "PostBrand")]
-        public async Task<ActionResult<BrandDTO>> PostBrandAsync(BrandDTO brand)
+        public async Task<ActionResult<BrandDTO>> PostBrandAsync([FromBody] BrandDTO brand)
         {
             var entity = await _service.CreateBrandAsync(brand);
             return CreatedAtRoute("GetBrandById", new { id = entity.Id }, entity);
@@ -54,7 +54,7 @@ namespace E_commerce.Controllers.Production
         }
 
         [HttpPut("{id}", Name = "PutBrand")]
-        public async Task<IActionResult> PutBrandAsync(int id, BrandDTO brand)
+        public async Task<IActionResult> PutBrandAsync(int id, [FromBody] BrandDTO brand)
         {
             var entity = await _service.UpdateBrandAsync(id, brand);
             if (entity == null)

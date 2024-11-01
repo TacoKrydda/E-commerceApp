@@ -226,6 +226,10 @@ namespace E_commerceClassLibrary.Context
 
             #region Sales
 
+            modelBuilder.Entity<CartItem>()
+                .HasIndex(ci => new { ci.OrderId, ci.ProductId })
+                .IsUnique();
+
             modelBuilder.Entity<Customer>()
                 .HasIndex(c => c.Email)
                 .IsUnique();

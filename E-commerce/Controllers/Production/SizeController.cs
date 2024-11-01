@@ -15,7 +15,7 @@ namespace E_commerce.Controllers.Production
         }
 
         [HttpPost(Name = "PostSize")]
-        public async Task<ActionResult<SizeDTO>> PostSizeAsync(SizeDTO size)
+        public async Task<ActionResult<SizeDTO>> PostSizeAsync([FromBody] SizeDTO size)
         {
             var entity = await _service.CreateSizeAsync(size);
             return CreatedAtRoute("GetSizeById", new { id = entity.Id }, entity);
@@ -54,7 +54,7 @@ namespace E_commerce.Controllers.Production
         }
 
         [HttpPut("{id}", Name = "PutSize")]
-        public async Task<IActionResult> PutSizeAsync(int id, SizeDTO size)
+        public async Task<IActionResult> PutSizeAsync(int id, [FromBody] SizeDTO size)
         {
             var entity = await _service.UpdateSizeAsync(id, size);
             if (entity == null)

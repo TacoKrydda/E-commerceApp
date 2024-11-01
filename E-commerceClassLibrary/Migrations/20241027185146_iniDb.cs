@@ -266,7 +266,7 @@ namespace E_commerceClassLibrary.Migrations
             migrationBuilder.InsertData(
                 table: "Orders",
                 columns: new[] { "Id", "CustomerId", "OrderDate", "OrderStatus", "ShippedDate", "TotalPrice" },
-                values: new object[] { 1, 1, new DateTime(2024, 10, 17, 17, 5, 6, 671, DateTimeKind.Local).AddTicks(7153), "Pending", null, 1499.99m });
+                values: new object[] { 1, 1, new DateTime(2024, 10, 27, 19, 51, 45, 727, DateTimeKind.Local).AddTicks(7762), "Pending", null, 1499.99m });
 
             migrationBuilder.InsertData(
                 table: "Products",
@@ -298,6 +298,13 @@ namespace E_commerceClassLibrary.Migrations
                 name: "IX_CartItems_OrderId",
                 table: "CartItems",
                 column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartItems_OrderId_ProductId",
+                table: "CartItems",
+                columns: new[] { "OrderId", "ProductId" },
+                unique: true,
+                filter: "[OrderId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartItems_ProductId",

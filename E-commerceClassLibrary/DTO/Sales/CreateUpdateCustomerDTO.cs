@@ -1,6 +1,6 @@
 ﻿namespace E_commerceClassLibrary.DTO.Sales
 {
-    public class CreateUpdateCustomer
+    public class CreateUpdateCustomerDTO
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;

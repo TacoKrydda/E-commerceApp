@@ -192,5 +192,23 @@ namespace E_commerceClassLibrary.Services.Production
                 throw new InvalidOperationException("An error occurred while updating the entity.", ex);
             }
         }
+
+        public async Task AdjustStockAsync(int productId, int quantityChange)
+        {
+            var stock = await _context.Stocks.FirstOrDefaultAsync(s => s.ProductId == productId);
+            if (stock == null)
+            {
+                _logger.LogWarning("Stock not found for product ID {ProductId}", productId);
+                throw new KeyNotFoundException($"Stock not found for product ID {productId}");
+            }
+
+            stock.Quantity += quantityChange;
+            if (stock.Quantity < 0)
+            {
+                throw new InvalidOperationException("Stock cannot be negative");
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

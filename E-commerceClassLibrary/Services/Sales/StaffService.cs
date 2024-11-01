@@ -9,55 +9,52 @@ using System.Data.Common;
 
 namespace E_commerceClassLibrary.Services.Sales
 {
-    public class CustomerService : ICustomerService
+    public class StaffService : IStaffService
     {
         private readonly EcommerceContext _context;
-        private readonly ILogger<CustomerService> _logger;
+        private readonly ILogger<StaffService> _logger;
         private readonly IMapper _mapper;
-        public CustomerService(EcommerceContext context, ILogger<CustomerService> logger, IMapper mapper)
+
+        public StaffService(EcommerceContext context, ILogger<StaffService> logger, IMapper mapper)
         {
             _context = context;
             _logger = logger;
             _mapper = mapper;
         }
 
-        public async Task<ReadCustomerDTO> CreateCustomerAsync(CreateUpdateCustomerDTO customer)
+        public async Task<ReadStaffDTO> CreateStaffAsync(CreateUpdateStaffDTO staff)
         {
-            if (customer == null || string.IsNullOrWhiteSpace(customer.Email))
+            if (staff == null || string.IsNullOrWhiteSpace(staff.Email))
             {
                 _logger.LogWarning("Invalid entity data provided.");
                 throw new ArgumentException("Entity data is invalid.");
             }
 
-            if (await EntityExistsAsync(customer.Email))
+            if (await EntityExistsAsync(staff.Email))
             {
-                _logger.LogWarning("An Entity with the same mail already exists: {EntityMail}", customer.Email);
+                _logger.LogWarning("An Entity with the same mail already exists: {EntityMail}", staff.Email);
                 throw new InvalidOperationException("An entity with the same mail already exists.");
             }
 
-            var entity = new Customer
+            var entity = new Staff
             {
-                FirstName = customer.FirstName,
-                LastName = customer.LastName,
-                Email = customer.Email,
-                Phone = customer.Phone,
-                Street = customer.Street,
-                City = customer.City,
+                FirstName = staff.FirstName,
+                LastName = staff.LastName,
+                Email = staff.Email,
+                Phone = staff.Phone
             };
 
             try
             {
-                await _context.Customers.AddAsync(entity);
+                await _context.Staff.AddAsync(entity);
                 await _context.SaveChangesAsync();
-                return new ReadCustomerDTO
+                return new ReadStaffDTO
                 {
                     Id = entity.Id,
                     FirstName = entity.FirstName,
                     LastName = entity.LastName,
                     Email = entity.Email,
-                    Phone = entity.Phone,
-                    Street = entity.Street,
-                    City = entity.City,
+                    Phone = entity.Phone
                 };
             }
             catch (DbUpdateException ex)
@@ -67,7 +64,7 @@ namespace E_commerceClassLibrary.Services.Sales
             }
         }
 
-        public async Task DeleteCustomerAsync(int id)
+        public async Task DeleteStaffAsync(int id)
         {
             if (id <= 0)
             {
@@ -76,14 +73,14 @@ namespace E_commerceClassLibrary.Services.Sales
 
             try
             {
-                var entity = await _context.Customers.FindAsync(id);
+                var entity = await _context.Staff.FindAsync(id);
                 if (entity == null)
                 {
                     _logger.LogWarning("Entity with ID {Id} not found.", id);
                     throw new KeyNotFoundException($"Entity with ID {id} not found.");
                 }
 
-                _context.Customers.Remove(entity);
+                _context.Staff.Remove(entity);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException ex)
@@ -95,10 +92,10 @@ namespace E_commerceClassLibrary.Services.Sales
 
         public async Task<bool> EntityExistsAsync(string email)
         {
-            return await _context.Customers.AnyAsync(c => c.Email == email);
+            return await _context.Staff.AnyAsync(s => s.Email == email);
         }
 
-        public async Task<ReadCustomerDTO> GetCustomerByIdAsync(int id)
+        public async Task<ReadStaffDTO> GetStaffByIdAsync(int id)
         {
             if (id <= 0)
             {
@@ -107,22 +104,20 @@ namespace E_commerceClassLibrary.Services.Sales
 
             try
             {
-                var entity = await _context.Customers.FirstOrDefaultAsync(c => c.Id == id);
+                var entity = await _context.Staff.FirstOrDefaultAsync(s => s.Id == id);
 
                 if (entity == null)
                 {
                     _logger.LogWarning("Entity with ID {Id} not found.", id);
                     throw new KeyNotFoundException($"Entity with ID {id} not found.");
                 }
-                return new ReadCustomerDTO
+                return new ReadStaffDTO
                 {
                     Id = entity.Id,
                     FirstName = entity.FirstName,
                     LastName = entity.LastName,
                     Email = entity.Email,
-                    Phone = entity.Phone,
-                    Street = entity.Street,
-                    City = entity.City,
+                    Phone = entity.Phone
                 };
             }
             catch (DbException ex)
@@ -132,21 +127,19 @@ namespace E_commerceClassLibrary.Services.Sales
             }
         }
 
-        public async Task<IEnumerable<ReadCustomerDTO>> GetCustomersAsync()
+        public async Task<IEnumerable<ReadStaffDTO>> GetStaffsAsync()
         {
             try
             {
-                var entity = await _context.Customers.ToListAsync();
+                var entity = await _context.Staff.ToListAsync();
 
-                return entity.Select(c => new ReadCustomerDTO
+                return entity.Select(s => new ReadStaffDTO
                 {
-                    Id = c.Id,
-                    FirstName = c.FirstName,
-                    LastName = c.LastName,
-                    Email = c.Email,
-                    Phone = c.Phone,
-                    Street = c.Street,
-                    City = c.City,
+                    Id = s.Id,
+                    FirstName = s.FirstName,
+                    LastName = s.LastName,
+                    Email = s.Email,
+                    Phone = s.Phone
                 }).ToList();
             }
             catch (DbException ex)
@@ -156,7 +149,7 @@ namespace E_commerceClassLibrary.Services.Sales
             }
         }
 
-        public async Task<ReadCustomerDTO> UpdateCustomerAsync(int id, CreateUpdateCustomerDTO customer)
+        public async Task<ReadStaffDTO> UpdateStaffAsync(int id, CreateUpdateStaffDTO staff)
         {
             if (id <= 0)
             {
@@ -165,17 +158,17 @@ namespace E_commerceClassLibrary.Services.Sales
 
             try
             {
-                var existingEntity = await _context.Customers.FindAsync(id);
+                var existingEntity = await _context.Staff.FindAsync(id);
                 if (existingEntity == null)
                 {
                     _logger.LogWarning("Entity with ID {Id} not found.", id);
                     throw new KeyNotFoundException($"Entity with ID {id} not found.");
                 }
 
-                _mapper.Map(customer, existingEntity);
+                _mapper.Map(staff, existingEntity);
 
                 await _context.SaveChangesAsync();
-                return _mapper.Map<ReadCustomerDTO>(existingEntity);
+                return _mapper.Map<ReadStaffDTO>(existingEntity);
             }
             catch (DbUpdateException ex)
             {

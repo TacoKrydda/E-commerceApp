@@ -244,6 +244,10 @@ namespace E_commerceClassLibrary.Migrations
 
                     b.HasIndex("ProductId");
 
+                    b.HasIndex("OrderId", "ProductId")
+                        .IsUnique()
+                        .HasFilter("[OrderId] IS NOT NULL");
+
                     b.ToTable("CartItems");
 
                     b.HasData(
@@ -353,7 +357,7 @@ namespace E_commerceClassLibrary.Migrations
                         {
                             Id = 1,
                             CustomerId = 1,
-                            OrderDate = new DateTime(2024, 10, 17, 17, 5, 6, 671, DateTimeKind.Local).AddTicks(7153),
+                            OrderDate = new DateTime(2024, 10, 27, 19, 51, 45, 727, DateTimeKind.Local).AddTicks(7762),
                             OrderStatus = "Pending",
                             TotalPrice = 1499.99m
                         });
