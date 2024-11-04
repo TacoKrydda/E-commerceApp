@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace E_commerceClassLibrary.Context
 {
-    public class E_commerceContext : DbContext
+    public class EcommerceContext : DbContext
     {
-        public E_commerceContext()
+        public EcommerceContext()
         {
 
         }
-        public E_commerceContext(DbContextOptions<E_commerceContext> options) : base(options)
+        public EcommerceContext(DbContextOptions<EcommerceContext> options) : base(options)
         {
 
         }
@@ -211,16 +211,24 @@ namespace E_commerceClassLibrary.Context
                 .IsUnique();
 
             modelBuilder.Entity<Product>()
-                .HasIndex(p => p.Name)
+                .HasIndex(p => new { p.Name, p.BrandId })
                 .IsUnique();
 
             modelBuilder.Entity<Size>()
                 .HasIndex(s => s.Name)
                 .IsUnique();
 
+            modelBuilder.Entity<Stock>()
+                .HasIndex(s => s.ProductId)
+                .IsUnique();
+
             #endregion
 
             #region Sales
+
+            modelBuilder.Entity<CartItem>()
+                .HasIndex(ci => new { ci.OrderId, ci.ProductId })
+                .IsUnique();
 
             modelBuilder.Entity<Customer>()
                 .HasIndex(c => c.Email)

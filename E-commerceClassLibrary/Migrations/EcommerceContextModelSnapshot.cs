@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace E_commerceClassLibrary.Migrations
 {
-    [DbContext(typeof(E_commerceContext))]
-    partial class E_commerceContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(EcommerceContext))]
+    partial class EcommerceContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -142,10 +142,10 @@ namespace E_commerceClassLibrary.Migrations
 
                     b.HasIndex("ColorId");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.HasIndex("SizeId");
+
+                    b.HasIndex("Name", "BrandId")
+                        .IsUnique();
 
                     b.ToTable("Products");
 
@@ -243,6 +243,10 @@ namespace E_commerceClassLibrary.Migrations
                     b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("OrderId", "ProductId")
+                        .IsUnique()
+                        .HasFilter("[OrderId] IS NOT NULL");
 
                     b.ToTable("CartItems");
 
@@ -353,7 +357,7 @@ namespace E_commerceClassLibrary.Migrations
                         {
                             Id = 1,
                             CustomerId = 1,
-                            OrderDate = new DateTime(2024, 10, 16, 15, 23, 55, 50, DateTimeKind.Local).AddTicks(2398),
+                            OrderDate = new DateTime(2024, 10, 27, 19, 51, 45, 727, DateTimeKind.Local).AddTicks(7762),
                             OrderStatus = "Pending",
                             TotalPrice = 1499.99m
                         });
