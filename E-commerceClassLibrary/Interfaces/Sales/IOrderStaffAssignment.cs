@@ -4,10 +4,11 @@ namespace E_commerceClassLibrary.Interfaces.Sales
 {
     public interface IOrderStaffAssignment
     {
-        Task<ReadOrderStaffAssignment> CreateOrderStaffAssignmentAsync(CreateUpdateOrderStaffAssignment assignment);
-        Task DeleteOrderAsync(int id);
-        Task<ReadOrderStaffAssignment> GetOrderStaffAssignmentByIdAsync(int id);
-        Task<IEnumerable<ReadOrderStaffAssignment>> GetOrderStaffAssignmentsAsync();
-        Task<ReadOrderStaffAssignment> UpdateOrderStaffAssignmentAsync(int id, CreateUpdateOrderStaffAssignment assignment);
+        Task<ReadOrderStaffAssignmentDTO> CreateOrderStaffAssignmentAsync(CreateUpdateOrderStaffAssignmentDTO assignment);
+        Task DeleteOrderStaffAssignmentAsync(int id);
+        Task<ReadOrderStaffAssignmentDTO> GetOrderStaffAssignmentByIdAsync(int id);
+        Task<IEnumerable<ReadOrderStaffAssignmentDTO>> GetOrderStaffAssignmentsAsync();
+        Task<ReadOrderStaffAssignmentDTO> UpdateOrderStaffAssignmentAsync(int id, CreateUpdateOrderStaffAssignmentDTO assignment);
+        Task<bool> EntityExistsAsync(int staffId);
     }
 }

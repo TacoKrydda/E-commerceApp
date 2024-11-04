@@ -1,6 +1,6 @@
 ﻿namespace E_commerceClassLibrary.DTO.Sales
 {
-    public class ReadOrderStaffAssignment
+    public class ReadOrderStaffAssignmentDTO
     {
         public int Id { get; set; }
         public int OrderId { get; set; }

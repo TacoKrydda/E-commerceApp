@@ -30,6 +30,7 @@ builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<ICartItemService, CartItemService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderStaffAssignment, OrderStaffAssignmentService>();
 builder.Services.AddScoped<IStaffService, StaffService>();
 
 
