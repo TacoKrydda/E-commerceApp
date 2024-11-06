@@ -33,6 +33,13 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderStaffAssignment, OrderStaffAssignmentService>();
 builder.Services.AddScoped<IStaffService, StaffService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontendLocalhost",
+        policy => policy.WithOrigins("http://localhost:3000")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+});
 
 var app = builder.Build();
 
@@ -44,6 +51,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowFrontendLocalhost");
 
 app.UseAuthorization();
 
