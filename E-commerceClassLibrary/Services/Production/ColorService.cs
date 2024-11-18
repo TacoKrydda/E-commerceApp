@@ -110,7 +110,7 @@ namespace E_commerceClassLibrary.Services.Production
         {
             try
             {
-                var entity = await _context.Categories.ToListAsync();
+                var entity = await _context.Colors.ToListAsync();
 
                 return entity.Select(c => new ColorDTO
                 {

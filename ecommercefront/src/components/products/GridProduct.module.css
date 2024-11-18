@@ -1,0 +1,67 @@
+:root {
+  --main-color: hotpink;
+  --gap-size: 1.25rem;
+  --gap-size-sml: 0.625rem;
+  --marg-top-or-btm: 0.625rem;
+  --pad-sml: 0.625rem;
+}
+
+.products {
+  margin-top: var(--marg-top-or-btm);
+  margin-bottom: var(--marg-top-or-btm);
+  box-sizing: border-box;
+  border: 0;
+}
+
+.list {
+  display: flex;
+  gap: var(--gap-size-sml);
+  flex-wrap: wrap;
+  max-width: 100%;
+  box-sizing: border-box;
+  border: 0;
+
+  @media (min-width: 48rem) {
+    gap: var(--gap-size);
+  }
+}
+
+.item {
+  flex: 1;
+  position: relative;
+  box-sizing: border-box;
+  border: 0;
+  flex-basis: 48%;
+  max-width: 48%;
+
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  margin: 0;
+
+  a {
+    color: black;
+    text-decoration: none;
+  }
+
+  @media (min-width: 48rem) {
+    flex-basis: calc(33.33% - var(--gap-size));
+    max-width: calc(
+      33.33% - var(--gap-size)
+    ); /* Ändra till grid för när man filtrar 2 bilder*/
+  }
+}
+
+.item:hover {
+  transform: translateY(-0.625rem);
+}
+
+.image {
+  width: 100%;
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: var(--pad-sml);
+}
