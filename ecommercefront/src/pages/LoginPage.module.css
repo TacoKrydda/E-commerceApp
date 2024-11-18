@@ -1,0 +1,11 @@
+* {
+  /* Ensure same sizing of all elements */
+  box-sizing: border-box;
+}
+
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}

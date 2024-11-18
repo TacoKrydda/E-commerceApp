@@ -1,0 +1,26 @@
+.activeFilterSection {
+  box-sizing: border-box;
+  border: 0;
+}
+
+.activeFilters {
+  display: flex;
+  padding: 4px;
+  flex-wrap: wrap;
+  gap: 10px;
+  border: 0;
+
+  p {
+    cursor: pointer;
+    border: solid;
+    padding: 4px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease;
+  }
+
+  p:hover {
+    transform: translateY(-5px);
+    color: hsl(0, 0%, 40%);
+  }
+}

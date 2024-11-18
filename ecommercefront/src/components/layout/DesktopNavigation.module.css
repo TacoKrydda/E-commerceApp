@@ -1,0 +1,23 @@
+.leftAside {
+  box-sizing: border-box;
+  border: 0;
+  margin: 1rem;
+}
+
+.category {
+  color: black;
+  border: 0;
+
+  p {
+    font-size: 1.5rem;
+  }
+}
+
+.category:hover {
+  cursor: pointer;
+  color: rgb(107, 105, 105);
+}
+.category.active {
+  font-weight: bold;
+  font-size: 1.6rem;
+}
