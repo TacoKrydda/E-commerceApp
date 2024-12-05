@@ -4,6 +4,7 @@ using E_commerceClassLibrary.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_commerceClassLibrary.Migrations
 {
     [DbContext(typeof(EcommerceContext))]
-    partial class EcommerceContextModelSnapshot : ModelSnapshot
+    [Migration("20241127083121_updateIsUniqueForProduct")]
+    partial class updateIsUniqueForProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,12 +49,7 @@ namespace E_commerceClassLibrary.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Line Art"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Dalle"
+                            Name = "Brand 1"
                         });
                 });
 
@@ -79,27 +77,7 @@ namespace E_commerceClassLibrary.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Shirt"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Pants"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Jacket"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Hoodie"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Underwear"
+                            Name = "Category 1"
                         });
                 });
 
@@ -127,22 +105,7 @@ namespace E_commerceClassLibrary.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Red"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Green"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Blue"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "White"
+                            Name = "Color 1"
                         });
                 });
 
@@ -162,10 +125,6 @@ namespace E_commerceClassLibrary.Migrations
 
                     b.Property<int>("ColorId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -188,7 +147,7 @@ namespace E_commerceClassLibrary.Migrations
 
                     b.HasIndex("SizeId");
 
-                    b.HasIndex("Name", "BrandId", "ColorId", "SizeId")
+                    b.HasIndex("Name", "BrandId", "SizeId")
                         .IsUnique();
 
                     b.ToTable("Products");
@@ -200,208 +159,9 @@ namespace E_commerceClassLibrary.Migrations
                             BrandId = 1,
                             CategoryId = 1,
                             ColorId = 1,
-                            ImagePath = "images/ShirtRed.png",
-                            Name = "Line Art Shirt",
+                            Name = "Product 1",
                             Price = 1499.99m,
                             SizeId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            BrandId = 1,
-                            CategoryId = 1,
-                            ColorId = 2,
-                            ImagePath = "images/ShirtGreen.png",
-                            Name = "Line Art Shirt",
-                            Price = 1499.99m,
-                            SizeId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            BrandId = 1,
-                            CategoryId = 1,
-                            ColorId = 3,
-                            ImagePath = "images/ShirtBlue.png",
-                            Name = "Line Art Shirt",
-                            Price = 1499.99m,
-                            SizeId = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            BrandId = 1,
-                            CategoryId = 2,
-                            ColorId = 1,
-                            ImagePath = "images/PantsRed.png",
-                            Name = "Line Art Pants",
-                            Price = 1099.99m,
-                            SizeId = 1
-                        },
-                        new
-                        {
-                            Id = 5,
-                            BrandId = 1,
-                            CategoryId = 2,
-                            ColorId = 2,
-                            ImagePath = "images/PantsGreen.png",
-                            Name = "Line Art Pants",
-                            Price = 1099.99m,
-                            SizeId = 1
-                        },
-                        new
-                        {
-                            Id = 6,
-                            BrandId = 1,
-                            CategoryId = 2,
-                            ColorId = 3,
-                            ImagePath = "images/PantsBlue.png",
-                            Name = "Line Art Pants",
-                            Price = 1099.99m,
-                            SizeId = 1
-                        },
-                        new
-                        {
-                            Id = 7,
-                            BrandId = 1,
-                            CategoryId = 3,
-                            ColorId = 1,
-                            ImagePath = "images/JacketRed.png",
-                            Name = "Line Art Jacket",
-                            Price = 2499.99m,
-                            SizeId = 1
-                        },
-                        new
-                        {
-                            Id = 8,
-                            BrandId = 1,
-                            CategoryId = 3,
-                            ColorId = 2,
-                            ImagePath = "images/JacketGreen.png",
-                            Name = "Line Art Jacket",
-                            Price = 2499.99m,
-                            SizeId = 1
-                        },
-                        new
-                        {
-                            Id = 9,
-                            BrandId = 1,
-                            CategoryId = 3,
-                            ColorId = 3,
-                            ImagePath = "images/JacketBlue.png",
-                            Name = "Line Art Jacket",
-                            Price = 2499.99m,
-                            SizeId = 1
-                        },
-                        new
-                        {
-                            Id = 10,
-                            BrandId = 1,
-                            CategoryId = 4,
-                            ColorId = 1,
-                            ImagePath = "images/HoodieRed.png",
-                            Name = "Line Art Hoodie",
-                            Price = 1899.99m,
-                            SizeId = 1
-                        },
-                        new
-                        {
-                            Id = 11,
-                            BrandId = 1,
-                            CategoryId = 4,
-                            ColorId = 2,
-                            ImagePath = "images/HoodieGreen.png",
-                            Name = "Line Art Hoodie",
-                            Price = 1899.99m,
-                            SizeId = 1
-                        },
-                        new
-                        {
-                            Id = 12,
-                            BrandId = 1,
-                            CategoryId = 4,
-                            ColorId = 3,
-                            ImagePath = "images/HoodieBlue.png",
-                            Name = "Line Art Hoodie",
-                            Price = 1899.99m,
-                            SizeId = 1
-                        },
-                        new
-                        {
-                            Id = 13,
-                            BrandId = 2,
-                            CategoryId = 4,
-                            ColorId = 4,
-                            ImagePath = "images/DallHoodie.webp",
-                            Name = "Dalle Hoodie",
-                            Price = 777m,
-                            SizeId = 1
-                        },
-                        new
-                        {
-                            Id = 14,
-                            BrandId = 2,
-                            CategoryId = 4,
-                            ColorId = 4,
-                            ImagePath = "images/DallHoodie.webp",
-                            Name = "Dalle Hoodie",
-                            Price = 777m,
-                            SizeId = 2
-                        },
-                        new
-                        {
-                            Id = 15,
-                            BrandId = 2,
-                            CategoryId = 4,
-                            ColorId = 4,
-                            ImagePath = "images/DallHoodie.webp",
-                            Name = "Dalle Hoodie",
-                            Price = 777m,
-                            SizeId = 3
-                        },
-                        new
-                        {
-                            Id = 16,
-                            BrandId = 2,
-                            CategoryId = 4,
-                            ColorId = 4,
-                            ImagePath = "images/DallHoodie.webp",
-                            Name = "Dalle Hoodie",
-                            Price = 777m,
-                            SizeId = 4
-                        },
-                        new
-                        {
-                            Id = 17,
-                            BrandId = 2,
-                            CategoryId = 3,
-                            ColorId = 4,
-                            ImagePath = "images/DallJacket.webp",
-                            Name = "Dalle Jacket",
-                            Price = 777m,
-                            SizeId = 3
-                        },
-                        new
-                        {
-                            Id = 18,
-                            BrandId = 2,
-                            CategoryId = 2,
-                            ColorId = 4,
-                            ImagePath = "images/DallPants.webp",
-                            Name = "Dalle Pants",
-                            Price = 777m,
-                            SizeId = 2
-                        },
-                        new
-                        {
-                            Id = 19,
-                            BrandId = 2,
-                            CategoryId = 1,
-                            ColorId = 4,
-                            ImagePath = "images/DallShirt.webp",
-                            Name = "Dalle Shirt",
-                            Price = 777m,
-                            SizeId = 2
                         });
                 });
 
@@ -429,22 +189,7 @@ namespace E_commerceClassLibrary.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "S"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "M"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "L"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "XL"
+                            Name = "Size 1"
                         });
                 });
 
@@ -475,114 +220,6 @@ namespace E_commerceClassLibrary.Migrations
                         {
                             Id = 1,
                             ProductId = 1,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ProductId = 2,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ProductId = 3,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ProductId = 4,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ProductId = 5,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 6,
-                            ProductId = 6,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 7,
-                            ProductId = 7,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 8,
-                            ProductId = 8,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 9,
-                            ProductId = 9,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 10,
-                            ProductId = 10,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 11,
-                            ProductId = 11,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 12,
-                            ProductId = 12,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 13,
-                            ProductId = 13,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 14,
-                            ProductId = 14,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 15,
-                            ProductId = 15,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 16,
-                            ProductId = 16,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 17,
-                            ProductId = 17,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 18,
-                            ProductId = 18,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            Id = 19,
-                            ProductId = 19,
                             Quantity = 100
                         });
                 });
@@ -723,7 +360,7 @@ namespace E_commerceClassLibrary.Migrations
                         {
                             Id = 1,
                             CustomerId = 1,
-                            OrderDate = new DateTime(2024, 12, 5, 18, 42, 33, 990, DateTimeKind.Local).AddTicks(4123),
+                            OrderDate = new DateTime(2024, 11, 27, 9, 31, 20, 194, DateTimeKind.Local).AddTicks(6972),
                             OrderStatus = "Pending",
                             TotalPrice = 1499.99m
                         });

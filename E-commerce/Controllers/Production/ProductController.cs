@@ -63,5 +63,17 @@ namespace E_commerce.Controllers.Production
             }
             return Ok(entity);
         }
+
+        [HttpGet("by-name", Name = "GetProductByName")]
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProductByName(string name)
+        {
+            var entities = await _service.GetProductByNameAsync(name);
+            if (entities == null || !entities.Any())
+            {
+                return NotFound();
+            }
+            return Ok(entities);
+        }
+
     }
 }

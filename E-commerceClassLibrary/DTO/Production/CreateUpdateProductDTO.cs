@@ -8,6 +8,7 @@
         public int ColorId { get; set; }
         public int SizeId { get; set; }
         public decimal Price { get; set; }
+        public string ImagePath { get; set; } = string.Empty;
         public int StockQuantity { get; set; }
     }
 }

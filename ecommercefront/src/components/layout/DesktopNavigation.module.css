@@ -2,6 +2,8 @@
   box-sizing: border-box;
   border: 0;
   margin: 1rem;
+  position: sticky;
+  top: 0;
 }
 
 .category {

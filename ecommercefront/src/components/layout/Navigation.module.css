@@ -13,7 +13,9 @@
 .navItem {
   height: 3rem;
 
+  .navItemContent,
   a {
+    position: relative;
     height: 100%;
     padding: 0 1.875rem;
     text-decoration: none;
@@ -22,13 +24,21 @@
     color: black;
   }
 
+  .navItemContent:hover,
   a:hover {
+    cursor: pointer;
     background-color: hsl(353, 25%, 20%);
   }
 }
 
 .navItem:first-child {
   margin-right: auto;
+}
+
+.showCart {
+  position: absolute;
+  top: 50px;
+  right: 0;
 }
 
 .hideOnMobile {

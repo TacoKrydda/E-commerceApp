@@ -21,7 +21,7 @@
   font-size: 1.5rem;
   border-bottom: solid;
 
-  a {
+  .navItemContent {
     height: 100%;
     width: 100%;
     display: flex;

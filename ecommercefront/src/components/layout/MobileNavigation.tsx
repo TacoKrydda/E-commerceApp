@@ -9,22 +9,17 @@ interface MobileNavigationProps {
 export const MobileNavigation: React.FC<MobileNavigationProps> = ({
   handleShowSidebar,
 }) => {
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const handleNavigateToCategory = (category: string) => {
-  navigate(`/products?category=${category}`);
-  handleShowSidebar();
-};
-
-  // const mobileNavOpenOrClose = (category: string) => {
-  //   onCategoryChange(category);
-  //   handleShowSidebar();
-  // };
+  const handleNavigateToCategory = (category: string) => {
+    navigate(`/products?category=${category}`);
+    handleShowSidebar();
+  };
 
   return (
     <div className={Styles.sidebar}>
       <div className={Styles.mobileNavItem} onClick={handleShowSidebar}>
-        <a href="#">
+        <div className={Styles.navItemContent}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="48px"
@@ -34,31 +29,37 @@ const handleNavigateToCategory = (category: string) => {
           >
             <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
           </svg>
-        </a>
+        </div>
       </div>
       <div
         className={Styles.mobileNavItem}
         onClick={() => handleNavigateToCategory("Pants")}
       >
-        <a href="#">Byxor</a>
+        <div className={Styles.navItemContent}>Byxor</div>
       </div>
       <div
         className={Styles.mobileNavItem}
-        onClick={() => handleNavigateToCategory("T-Shirts & Hoodies")}
+        onClick={() => handleNavigateToCategory("T-Shirt")}
       >
-        <a href="#">T-Shirt & Hoodies</a>
+        <div className={Styles.navItemContent}>T-Shirt</div>
+      </div>
+      <div
+        className={Styles.mobileNavItem}
+        onClick={() => handleNavigateToCategory("Hoodie")}
+      >
+        <div className={Styles.navItemContent}>Hoodies</div>
       </div>
       <div
         className={Styles.mobileNavItem}
         onClick={() => handleNavigateToCategory("Jacket")}
       >
-        <a href="#">Jackor</a>
+        <div className={Styles.navItemContent}>Jackor</div>
       </div>
       <div
         className={Styles.mobileNavItem}
         onClick={() => handleNavigateToCategory("Underwear")}
       >
-        <a href="#">Underkläder</a>
+        <div className={Styles.navItemContent}>Underkläder</div>
       </div>
     </div>
   );

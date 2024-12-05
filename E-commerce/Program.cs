@@ -56,6 +56,8 @@ app.UseCors("AllowFrontendLocalhost");
 
 app.UseAuthorization();
 
+app.UseStaticFiles();
+
 app.MapControllers();
 
 app.Run();

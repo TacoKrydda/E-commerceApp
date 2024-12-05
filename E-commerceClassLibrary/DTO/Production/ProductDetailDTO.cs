@@ -10,6 +10,7 @@
         public string Size { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public int Stock { get; set; }
+        public string ImagePath { get; set; } = string.Empty;
         public List<ColorDTO>? ColorOptions { get; set; }
     }
 }
