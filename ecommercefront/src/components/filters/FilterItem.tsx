@@ -1,11 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import Styles from "./FilterItem.module.css";
-import { useMediaQuery } from "react-responsive";
+// import { useMediaQuery } from "react-responsive";
+
+interface FilterOption {
+  id: number;
+  name: string;
+}
 
 interface FilterItemProps {
   filterKey: string;
   label: string;
-  options: string[];
+  options: FilterOption[];
   checkedFilters: string[];
   handleCheckboxChange: (filterKey: string, option: string) => void;
 }
@@ -17,7 +22,7 @@ const FilterItem: React.FC<FilterItemProps> = ({
   checkedFilters,
   handleCheckboxChange,
 }) => {
-  const isMobile = useMediaQuery({ maxWidth: 767 });
+  // const isMobile = useMediaQuery({ maxWidth: 767 });
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const filterRef = useRef<HTMLDivElement>(null);
 
@@ -58,30 +63,27 @@ const FilterItem: React.FC<FilterItemProps> = ({
             onClick={closeMobileFilter}
             className={Styles.moblieCloseDropdown}
           >
-            <a>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="3rem"
-                viewBox="0 -960 960 960"
-                width="3rem"
-                fill="#e8eaed"
-              >
-                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-              </svg>
-            </a>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="2rem"
+              viewBox="0 -960 960 960"
+              width="2rem"
+              fill="#e8eaed"
+            >
+              <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+            </svg>
           </div>
           {options.map((option) => (
             <div
-              key={option}
+              key={option.id}
               className={Styles.option}
-              onClick={() => handleOptionChange(option)}
+              onClick={() => handleOptionChange(option.name)}
             >
               <input
                 type="checkbox"
-                checked={checkedFilters.includes(option)} // Kontrollera om alternativet är markerat
-                onChange={() => handleOptionChange(option)}
+                checked={checkedFilters.includes(option.name)} // Kontrollera om alternativet är markerat
               />
-              <label>{option}</label>
+              <label>{option.name}</label>
             </div>
           ))}
         </div>

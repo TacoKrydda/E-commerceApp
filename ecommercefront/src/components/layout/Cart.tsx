@@ -38,7 +38,6 @@ const Cart: React.FC<CartProps> = ({
         <thead>
           <tr>
             <th>Produkt</th>
-            <th>Färg</th>
             <th>Storlek</th>
             <th>Antal</th>
             <th>Pris</th>
@@ -47,17 +46,18 @@ const Cart: React.FC<CartProps> = ({
         <tbody>
           {cartItems.map((item) => (
             <tr key={item.id}>
-              <td>{item.name}</td>
-              <td>{item.color}</td>
-              <td>{item.size}</td>
               <td>
+                {item.name} ({item.color})
+              </td>
+              <td>{item.size}</td>
+              <td className={Styles.tdQuantity}>
                 <button
                   onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
                   disabled={item.quantity <= 1}
                 >
                   -
                 </button>
-                {item.quantity}
+                <p>{item.quantity}</p>
                 <button
                   onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
                   disabled={item.quantity >= item.stock}
@@ -76,14 +76,14 @@ const Cart: React.FC<CartProps> = ({
       <div className={Styles.cartSummary}>
         <p>Frakt: {shipping} kr</p>
         <p>Summa: {total + shipping} kr</p>
+        {cartItems.length > 0 && (
+          <Link to="/cart">
+            <button className={Styles.checkoutButton} onClick={closeCart}>
+              Till kassan
+            </button>
+          </Link>
+        )}
       </div>
-      {cartItems.length > 0 && (
-        <Link to="/cart">
-          <button className={Styles.checkoutButton} onClick={closeCart}>
-            Till kassan
-          </button>
-        </Link>
-      )}
     </div>
   );
 };

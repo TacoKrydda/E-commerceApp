@@ -5,7 +5,7 @@ import ScrollToTop from "./components/layout/ScrollToTop";
 import { Navigation } from "./components/layout/Navigation";
 import { LoginPage } from "./pages/LoginPage";
 import { UserPage } from "./pages/UserPage";
-import Cart, { CartItem } from "./components/layout/Cart";
+import { CartItem } from "./components/layout/Cart";
 
 import ProductList from "./pages/ProductList";
 import ProductDetail from "./pages/ProductDetail";
@@ -14,7 +14,7 @@ import { CartPage } from "./pages/CartPage";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
-
+  const [showCart, setShowCart] = useState(false);
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
   const [cartItems, setCartItems] = useState<CartItem[]>(
     () => JSON.parse(localStorage.getItem("cartItems") || "[]") // Ladda från localStorage
@@ -35,6 +35,10 @@ function App() {
 
   console.log(cartItems);
 
+  const handleCart = () => {
+    setShowCart(!showCart);
+  };
+
   const handleAddToCart = (item: CartItem) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find(
@@ -49,6 +53,13 @@ function App() {
       }
       return [...prevItems, item];
     });
+    // Visa cart-popup
+    setShowCart(true);
+
+    // Dölja cart-popup efter 3 sekunder
+    setTimeout(() => {
+      setShowCart(false);
+    }, 3000); // 3000 ms = 3 sekunder
   };
 
   const handleUpdateQuantity = (id: number, quantity: number) => {
@@ -77,6 +88,8 @@ function App() {
       <ScrollToTop />
       <Navigation
         isLogin={isLogin}
+        showCart={showCart}
+        handleCart={handleCart}
         handleShowSidebar={handleShowSidebar}
         showSidebar={showSidebar}
         cartItems={cartItems}

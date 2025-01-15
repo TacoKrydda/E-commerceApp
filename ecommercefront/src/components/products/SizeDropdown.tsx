@@ -14,7 +14,9 @@ const SizeDropdown: React.FC<SizeDropdownProps> = ({ size }) => {
       <div className={`${Styles.sizePopUp} ${isSize ? Styles.open : ""}`}>
         <p onClick={() => setIsSize(!isSize)}>Close</p>
         {size.map((size, index) => (
-          <p key={index}>{size}</p>
+          <p key={index} title="Not working, Future update">
+            {size}
+          </p>
         ))}
       </div>
     </div>

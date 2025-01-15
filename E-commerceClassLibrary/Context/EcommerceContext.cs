@@ -317,7 +317,7 @@ namespace E_commerceClassLibrary.Context
                 new Category
                 {
                     Id = 1,
-                    Name = "Shirt"
+                    Name = "T-Shirt"
                 },
                 new Category
                 {
@@ -610,6 +610,49 @@ namespace E_commerceClassLibrary.Context
                     SizeId = 2,
                     Price = 999m,
                     ImagePath = "images/pngwing.png"
+                }, new Product
+                {
+                    Id = 21,
+                    Name = "Line Art Shirt",
+                    BrandId = 1,
+                    CategoryId = 1,
+                    ColorId = 1,
+                    SizeId = 2,
+                    Price = 1499.99m,
+                    ImagePath = "images/ShirtRed.png"
+                },
+                new Product
+                {
+                    Id = 22,
+                    Name = "Line Art Shirt",
+                    BrandId = 1,
+                    CategoryId = 1,
+                    ColorId = 2,
+                    SizeId = 2,
+                    Price = 1499.99m,
+                    ImagePath = "images/ShirtGreen.png"
+                },
+                new Product
+                {
+                    Id = 23,
+                    Name = "Line Art Shirt",
+                    BrandId = 1,
+                    CategoryId = 1,
+                    ColorId = 3,
+                    SizeId = 2,
+                    Price = 1499.99m,
+                    ImagePath = "images/ShirtBlue.png"
+                },
+                new Product
+                {
+                    Id = 24,
+                    Name = "Line Art Pants",
+                    BrandId = 1,
+                    CategoryId = 2,
+                    ColorId = 1,
+                    SizeId = 2,
+                    Price = 1099.99m,
+                    ImagePath = "images/PantsRed.png"
                 }
                 );
 

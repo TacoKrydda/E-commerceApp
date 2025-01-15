@@ -32,56 +32,72 @@ export const CartPage: React.FC<CartPageProps> = ({
   const shipping = total > 0 ? 100 : 0; // Fraktkostnad om varukorgen är tom
 
   return (
-    <div className={Styles.cartContainer}>
-      <h2>Kundvagn</h2>
-      <table className={Styles.cartTable}>
-        <thead>
-          <tr>
-            <th>Produkt</th>
-            <th>Färg</th>
-            <th>Storlek</th>
-            <th>Antal</th>
-            <th>Pris</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cartItems.map((item) => (
-            <tr key={item.id}>
-              <td>{item.name}</td>
-              <td>{item.color}</td>
-              <td>{item.size}</td>
-              <td>
-                <button
-                  onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
-                  disabled={item.quantity <= 1}
-                >
-                  -
-                </button>
-                {item.quantity}
-                <button
-                  onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-                  disabled={item.quantity >= item.stock}
-                >
-                  +
-                </button>
-              </td>
-              <td>{item.price} kr</td>
-              <td>
-                <button onClick={() => onRemoveItem(item.id)}>🗑️</button>
-              </td>
+    <>
+      <div className={Styles.cartContainer}>
+        <h2>Kundvagn</h2>
+        <table className={Styles.cartTable}>
+          <thead>
+            <tr>
+              <th>Produkt</th>
+              <th>Storlek</th>
+              <th>Antal</th>
+              <th>Pris</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className={Styles.cartSummary}>
-        <p>Frakt: {shipping} kr</p>
-        <p>Summa: {total + shipping} kr</p>
+          </thead>
+          <tbody>
+            {cartItems.map((item) => (
+              <tr key={item.id}>
+                <td>
+                  <p className={Styles.textEllipsis}>
+                    {item.name} ({item.color})
+                  </p>
+                </td>
+                <td>{item.size}</td>
+                <td>
+                  <button
+                    onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
+                    disabled={item.quantity <= 1}
+                  >
+                    -
+                  </button>
+                  {item.quantity}
+                  <button
+                    onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                    disabled={item.quantity >= item.stock}
+                  >
+                    +
+                  </button>
+                </td>
+                <td>{item.price} kr</td>
+                <td>
+                  <button onClick={() => onRemoveItem(item.id)}>🗑️</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className={Styles.cartSummary}>
+          <p>Frakt: {shipping} kr</p>
+          <p>Summa: {total + shipping} kr</p>
+        </div>
+        <Link to="/">
+          <button
+            className={Styles.checkoutButton}
+            onClick={onEmptyCart}
+            disabled
+          >
+            Bekräfta Köp
+          </button>
+        </Link>
       </div>
-      <Link to="/">
-        <button className={Styles.checkoutButton} onClick={onEmptyCart}>
-          Bekräfta Köp
-        </button>
-      </Link>
-    </div>
+      <div className={Styles.cartContainer}>
+        <p>Just nu finns ingen kontouppgifter</p>
+        <Link to="/">
+          <button className={Styles.tempButton} onClick={onEmptyCart}>
+            Nollställ kundvagn
+          </button>
+        </Link>
+      </div>
+    </>
   );
 };

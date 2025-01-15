@@ -79,7 +79,7 @@ namespace E_commerceClassLibrary.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Shirt"
+                            Name = "T-Shirt"
                         },
                         new
                         {
@@ -402,6 +402,61 @@ namespace E_commerceClassLibrary.Migrations
                             Name = "Dalle Shirt",
                             Price = 777m,
                             SizeId = 2
+                        },
+                        new
+                        {
+                            Id = 20,
+                            BrandId = 2,
+                            CategoryId = 5,
+                            ColorId = 4,
+                            ImagePath = "images/pngwing.png",
+                            Name = "Fun Time",
+                            Price = 999m,
+                            SizeId = 2
+                        },
+                        new
+                        {
+                            Id = 21,
+                            BrandId = 1,
+                            CategoryId = 1,
+                            ColorId = 1,
+                            ImagePath = "images/ShirtRed.png",
+                            Name = "Line Art Shirt",
+                            Price = 1499.99m,
+                            SizeId = 2
+                        },
+                        new
+                        {
+                            Id = 22,
+                            BrandId = 1,
+                            CategoryId = 1,
+                            ColorId = 2,
+                            ImagePath = "images/ShirtGreen.png",
+                            Name = "Line Art Shirt",
+                            Price = 1499.99m,
+                            SizeId = 2
+                        },
+                        new
+                        {
+                            Id = 23,
+                            BrandId = 1,
+                            CategoryId = 1,
+                            ColorId = 3,
+                            ImagePath = "images/ShirtBlue.png",
+                            Name = "Line Art Shirt",
+                            Price = 1499.99m,
+                            SizeId = 2
+                        },
+                        new
+                        {
+                            Id = 24,
+                            BrandId = 1,
+                            CategoryId = 2,
+                            ColorId = 1,
+                            ImagePath = "images/PantsRed.png",
+                            Name = "Line Art Pants",
+                            Price = 1099.99m,
+                            SizeId = 2
                         });
                 });
 
@@ -584,6 +639,12 @@ namespace E_commerceClassLibrary.Migrations
                             Id = 19,
                             ProductId = 19,
                             Quantity = 100
+                        },
+                        new
+                        {
+                            Id = 20,
+                            ProductId = 20,
+                            Quantity = 100
                         });
                 });
 
@@ -723,7 +784,7 @@ namespace E_commerceClassLibrary.Migrations
                         {
                             Id = 1,
                             CustomerId = 1,
-                            OrderDate = new DateTime(2024, 12, 5, 18, 42, 33, 990, DateTimeKind.Local).AddTicks(4123),
+                            OrderDate = new DateTime(2025, 1, 9, 14, 6, 40, 429, DateTimeKind.Local).AddTicks(5511),
                             OrderStatus = "Pending",
                             TotalPrice = 1499.99m
                         });

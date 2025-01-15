@@ -1,7 +1,14 @@
+:root {
+  --color-hover: rgb(107, 105, 105);
+  --font-size-large: 1.5rem;
+  --font-size-large-active: 1.6rem;
+  --margin-large: 1rem;
+}
+
 .leftAside {
   box-sizing: border-box;
   border: 0;
-  margin: 1rem;
+  margin: var(--margin-large);
   position: sticky;
   top: 0;
 }
@@ -11,15 +18,15 @@
   border: 0;
 
   p {
-    font-size: 1.5rem;
+    font-size: var(--font-size-large);
   }
 }
 
 .category:hover {
   cursor: pointer;
-  color: rgb(107, 105, 105);
+  color: var(--color-hover);
 }
 .category.active {
   font-weight: bold;
-  font-size: 1.6rem;
+  font-size: var(--font-size-large-active);
 }

@@ -161,37 +161,63 @@ namespace E_commerceClassLibrary.Services.Production
             }
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetProductsAsync()
+        public async Task<IEnumerable<ProductDTO>> GetProductsAsync(
+            string? color,
+            string? size,
+            string? category,
+            string? brand)
         {
-            try
-            {
-                var entity = await _context.Products
-                    .Include(p => p.Brand)
-                    .Include(p => p.Category)
-                    .Include(p => p.Color)
-                    .Include(p => p.Size)
-                    .Include(p => p.Stock)
-                    .ToListAsync();
+            // Basquery för att inkludera nödvändiga relationer
+            var query = _context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .Include(p => p.Color)
+                .Include(p => p.Size)
+                .Include(p => p.Stock)
+                .AsQueryable();
 
-                return entity.Select(p => new ProductDTO
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Brand = p.Brand?.Name ?? string.Empty,
-                    Category = p.Category?.Name ?? string.Empty,
-                    Color = p.Color?.Name ?? string.Empty,
-                    Size = p.Size?.Name ?? string.Empty,
-                    Price = p.Price,
-                    ImagePath = p.ImagePath,
-                    Stock = p.Stock?.Quantity ?? 0
-                }).ToList();
-            }
-            catch (DbException ex)
+            // Lägg till dynamiska filter
+            if (!string.IsNullOrEmpty(color))
             {
-                _logger.LogError(ex, "An error occurred while retrieving the entities.");
-                throw new InvalidOperationException("An error occurred while retrieving the entities.", ex);
+                query = query.Where(p => p.Color.Name == color);
             }
+
+            if (!string.IsNullOrEmpty(size))
+            {
+                query = query.Where(p => p.Size.Name == size);
+            }
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                query = query.Where(p => p.Category.Name == category);
+            }
+
+            if (!string.IsNullOrEmpty(brand))
+            {
+                query = query.Where(p => p.Brand.Name == brand);
+            }
+
+            // Gruppera produkterna och välj första variationen
+            var groupedProducts = await query
+                .GroupBy(p => new { p.Name, p.BrandId, p.CategoryId })
+                .Select(g => g.First())
+                .ToListAsync();
+
+            // Mappa till DTO
+            return groupedProducts.Select(p => new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Brand = p.Brand?.Name ?? string.Empty,
+                Category = p.Category?.Name ?? string.Empty,
+                Color = p.Color?.Name ?? string.Empty,
+                Size = p.Size?.Name ?? string.Empty,
+                Price = p.Price,
+                ImagePath = p.ImagePath,
+                Stock = p.Stock?.Quantity ?? 0
+            }).ToList();
         }
+
 
         public async Task<ProductDTO> UpdateProductAsync(int id, CreateUpdateProductDTO product)
         {

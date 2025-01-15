@@ -2,21 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Styles from "./GridProduct.module.css";
 
-import genericImg from "./../../img/genericPic.webp"
-
-// interface Product {
-//   id: number;
-//   name: string;
-//   brand: string;
-//   price: number;
-//   size: string[];
-//   color: string[];
-//   length: string;
-//   fits: string;
-//   category: string;
-//   image: string[];
-// }
-
 interface ProductDTO {
   id: number;
   name: string;

@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import Styles from "./Navigation.module.css";
 import { MobileNavigation } from "./MobileNavigation";
 import Cart from "./Cart";
 import { CartItem } from "./Cart";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 interface NavigationProps {
   isLogin: boolean;
+  showCart: boolean;
   showSidebar: boolean;
   cartItems: CartItem[];
+  handleCart: () => void;
   onUpdateQuantity: (id: number, quantity: number) => void;
   onRemoveItem: (id: number) => void;
   handleShowSidebar: () => void;
@@ -16,27 +18,20 @@ interface NavigationProps {
 
 export const Navigation: React.FC<NavigationProps> = ({
   isLogin,
+  showCart,
+  handleCart,
   showSidebar,
   cartItems,
   onUpdateQuantity,
   onRemoveItem,
   handleShowSidebar,
 }) => {
-  const [showCart, setShowCart] = useState(false);
+  const location = useLocation();
 
-  const navigate = useNavigate();
-
-  const handleNavigate = (category: string) => {
-    navigate(`/=${category}`);
-    handleShowSidebar();
-  };
-
-  const handleCart = () => {
-    setShowCart(!showCart);
-  };
-
+  // Kontrollera om vi är på cart-sidan
+  const isCartPage = location.pathname === "/cart";
   return (
-    <>
+    <div className={Styles.navContainer}>
       <nav className={Styles.nav}>
         <div className={Styles.navOptions}>
           <div className={Styles.navItem}>
@@ -71,10 +66,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             )}
           </div>
 
-          <div
-            className={Styles.navItem}
-            onClick={() => setShowCart(!showCart)}
-          >
+          <div className={Styles.navItem} onClick={handleCart}>
             {cartItems.length > 0 ? (
               <div className={Styles.navItemContent}>
                 <svg
@@ -122,7 +114,7 @@ export const Navigation: React.FC<NavigationProps> = ({
           )}
         </div>
       </nav>
-      {showCart && (
+      {showCart && !isCartPage && (
         <div className={Styles.showCart}>
           <Cart
             cartItems={cartItems}
@@ -132,6 +124,6 @@ export const Navigation: React.FC<NavigationProps> = ({
           />
         </div>
       )}
-    </>
+    </div>
   );
 };

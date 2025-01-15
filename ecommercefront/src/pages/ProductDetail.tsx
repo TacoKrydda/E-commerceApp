@@ -16,7 +16,7 @@ interface ProductDTO {
   color: string;
   size: string;
   price: number;
-  image:string;
+  image: string;
   stock: number;
 }
 

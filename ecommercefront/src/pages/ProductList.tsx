@@ -24,11 +24,24 @@ interface ProductListProps {
   showSidebar: boolean;
 }
 
+const fetchFilteredProducts = async (filters: { [key: string]: string[] }) => {
+  const params = new URLSearchParams();
+
+  Object.entries(filters).forEach(([key, values]) => {
+    values.forEach((value) => params.append(key, value));
+  });
+
+  const response = await axiosInstance.get<ProductDTO[]>("/Product", {
+    params,
+  });
+
+  return response.data;
+};
+
 const ProductList: React.FC<ProductListProps> = ({
   handleShowSidebar,
   showSidebar,
 }) => {
-  const [products, setProducts] = useState<ProductDTO[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<ProductDTO[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,48 +50,27 @@ const ProductList: React.FC<ProductListProps> = ({
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axiosInstance.get<ProductDTO[]>("/Product");
-        setProducts(response.data);
+        const activeFilters: { [key: string]: string[] } = {};
+        searchParams.forEach((value, key) => {
+          if (!activeFilters[key]) {
+            activeFilters[key] = [];
+          }
+          activeFilters[key].push(value);
+        });
+
+        const data = await fetchFilteredProducts(activeFilters);
+        setFilteredProducts(data);
+        setError(null); // Nollställ eventuellt tidigare fel
       } catch (err) {
         setError((err as Error).message);
+        setFilteredProducts([]); // Säkerställ att listan är tom vid fel
       } finally {
         setLoading(false);
       }
     };
 
     fetchProducts();
-  }, []);
-
-  useEffect(() => {
-    // Gruppera alla filterval efter nyckel
-    const activeFilters: { [key: string]: string[] } = {};
-    searchParams.forEach((value, key) => {
-      if (!activeFilters[key]) {
-        activeFilters[key] = [];
-      }
-      activeFilters[key].push(value);
-    });
-
-    setFilteredProducts(
-      products.filter((product) =>
-        Object.entries(activeFilters).every(([filterKey, options]) => {
-          if (filterKey === "category") {
-            return options.includes(product.category);
-          }
-          if (filterKey === "size") {
-            return options.includes(product.size);
-          }
-          if (filterKey === "brand") {
-            return options.includes(product.brand);
-          }
-          if (filterKey === "color") {
-            return options.includes(product.color);
-          }
-          return true;
-        })
-      )
-    );
-  }, [searchParams, products]);
+  }, [searchParams]);
 
   return (
     <div className={Styles.productContainer}>
@@ -95,7 +87,11 @@ const ProductList: React.FC<ProductListProps> = ({
           <main className={Styles.right}>
             <section className={Styles.rightContent}>
               <FilterManager />
-              <GridProduct products={filteredProducts} />
+              {filteredProducts.length > 0 ? (
+                <GridProduct products={filteredProducts} />
+              ) : (
+                <p>No products found. Try adjusting your filters.</p>
+              )}
             </section>
           </main>
         </div>
