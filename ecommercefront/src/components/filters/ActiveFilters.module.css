@@ -1,3 +1,13 @@
+:root {
+  --border-radius-medium: 0.5rem;
+  --box-shadow-default: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.4);
+  --color-hover: hsl(0, 0%, 40%);
+  --gap-medium: 0.625rem;
+  --padding-small: 0.25rem;
+  --transition-transform: transform 0.3s ease;
+  --transform-translate-y-small: translateY(-0.313rem);
+}
+
 .activeFilterSection {
   box-sizing: border-box;
   border: 0;
@@ -5,22 +15,22 @@
 
 .activeFilters {
   display: flex;
-  padding: 4px;
+  padding: var(--padding-small);
   flex-wrap: wrap;
-  gap: 10px;
+  gap: var(--gap-medium);
   border: 0;
 
   p {
     cursor: pointer;
     border: solid;
-    padding: 4px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    transition: transform 0.3s ease;
+    padding: var(--padding-small);
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--box-shadow-default);
+    transition: var(--transition-transform);
   }
 
   p:hover {
-    transform: translateY(-5px);
-    color: hsl(0, 0%, 40%);
+    transform: var(--transform-translate-y-small);
+    color: var(--color-hover);
   }
 }

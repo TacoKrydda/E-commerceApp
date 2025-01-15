@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace E_commerceClassLibrary.Migrations
 {
     /// <inheritdoc />
-    public partial class iniDb : Migration
+    public partial class dbini : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -131,7 +133,8 @@ namespace E_commerceClassLibrary.Migrations
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     ColorId = table.Column<int>(type: "int", nullable: false),
                     SizeId = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -236,17 +239,34 @@ namespace E_commerceClassLibrary.Migrations
             migrationBuilder.InsertData(
                 table: "Brands",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { 1, "Brand 1" });
+                values: new object[,]
+                {
+                    { 1, "Line Art" },
+                    { 2, "Dalle" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { 1, "Category 1" });
+                values: new object[,]
+                {
+                    { 1, "T-Shirt" },
+                    { 2, "Pants" },
+                    { 3, "Jacket" },
+                    { 4, "Hoodie" },
+                    { 5, "Underwear" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Colors",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { 1, "Color 1" });
+                values: new object[,]
+                {
+                    { 1, "Red" },
+                    { 2, "Green" },
+                    { 3, "Blue" },
+                    { 4, "White" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Customers",
@@ -256,7 +276,13 @@ namespace E_commerceClassLibrary.Migrations
             migrationBuilder.InsertData(
                 table: "Sizes",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { 1, "Size 1" });
+                values: new object[,]
+                {
+                    { 1, "S" },
+                    { 2, "M" },
+                    { 3, "L" },
+                    { 4, "XL" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Staff",
@@ -266,12 +292,38 @@ namespace E_commerceClassLibrary.Migrations
             migrationBuilder.InsertData(
                 table: "Orders",
                 columns: new[] { "Id", "CustomerId", "OrderDate", "OrderStatus", "ShippedDate", "TotalPrice" },
-                values: new object[] { 1, 1, new DateTime(2024, 10, 27, 19, 51, 45, 727, DateTimeKind.Local).AddTicks(7762), "Pending", null, 1499.99m });
+                values: new object[] { 1, 1, new DateTime(2025, 1, 9, 14, 6, 40, 429, DateTimeKind.Local).AddTicks(5511), "Pending", null, 1499.99m });
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "Id", "BrandId", "CategoryId", "ColorId", "Name", "Price", "SizeId" },
-                values: new object[] { 1, 1, 1, 1, "Product 1", 1499.99m, 1 });
+                columns: new[] { "Id", "BrandId", "CategoryId", "ColorId", "ImagePath", "Name", "Price", "SizeId" },
+                values: new object[,]
+                {
+                    { 1, 1, 1, 1, "images/ShirtRed.png", "Line Art Shirt", 1499.99m, 1 },
+                    { 2, 1, 1, 2, "images/ShirtGreen.png", "Line Art Shirt", 1499.99m, 1 },
+                    { 3, 1, 1, 3, "images/ShirtBlue.png", "Line Art Shirt", 1499.99m, 1 },
+                    { 4, 1, 2, 1, "images/PantsRed.png", "Line Art Pants", 1099.99m, 1 },
+                    { 5, 1, 2, 2, "images/PantsGreen.png", "Line Art Pants", 1099.99m, 1 },
+                    { 6, 1, 2, 3, "images/PantsBlue.png", "Line Art Pants", 1099.99m, 1 },
+                    { 7, 1, 3, 1, "images/JacketRed.png", "Line Art Jacket", 2499.99m, 1 },
+                    { 8, 1, 3, 2, "images/JacketGreen.png", "Line Art Jacket", 2499.99m, 1 },
+                    { 9, 1, 3, 3, "images/JacketBlue.png", "Line Art Jacket", 2499.99m, 1 },
+                    { 10, 1, 4, 1, "images/HoodieRed.png", "Line Art Hoodie", 1899.99m, 1 },
+                    { 11, 1, 4, 2, "images/HoodieGreen.png", "Line Art Hoodie", 1899.99m, 1 },
+                    { 12, 1, 4, 3, "images/HoodieBlue.png", "Line Art Hoodie", 1899.99m, 1 },
+                    { 13, 2, 4, 4, "images/DallHoodie.webp", "Dalle Hoodie", 777m, 1 },
+                    { 14, 2, 4, 4, "images/DallHoodie.webp", "Dalle Hoodie", 777m, 2 },
+                    { 15, 2, 4, 4, "images/DallHoodie.webp", "Dalle Hoodie", 777m, 3 },
+                    { 16, 2, 4, 4, "images/DallHoodie.webp", "Dalle Hoodie", 777m, 4 },
+                    { 17, 2, 3, 4, "images/DallJacket.webp", "Dalle Jacket", 777m, 3 },
+                    { 18, 2, 2, 4, "images/DallPants.webp", "Dalle Pants", 777m, 2 },
+                    { 19, 2, 1, 4, "images/DallShirt.webp", "Dalle Shirt", 777m, 2 },
+                    { 20, 2, 5, 4, "images/pngwing.png", "Fun Time", 999m, 2 },
+                    { 21, 1, 1, 1, "images/ShirtRed.png", "Line Art Shirt", 1499.99m, 2 },
+                    { 22, 1, 1, 2, "images/ShirtGreen.png", "Line Art Shirt", 1499.99m, 2 },
+                    { 23, 1, 1, 3, "images/ShirtBlue.png", "Line Art Shirt", 1499.99m, 2 },
+                    { 24, 1, 2, 1, "images/PantsRed.png", "Line Art Pants", 1099.99m, 2 }
+                });
 
             migrationBuilder.InsertData(
                 table: "CartItems",
@@ -286,7 +338,29 @@ namespace E_commerceClassLibrary.Migrations
             migrationBuilder.InsertData(
                 table: "Stocks",
                 columns: new[] { "Id", "ProductId", "Quantity" },
-                values: new object[] { 1, 1, 100 });
+                values: new object[,]
+                {
+                    { 1, 1, 100 },
+                    { 2, 2, 100 },
+                    { 3, 3, 100 },
+                    { 4, 4, 100 },
+                    { 5, 5, 100 },
+                    { 6, 6, 100 },
+                    { 7, 7, 100 },
+                    { 8, 8, 100 },
+                    { 9, 9, 100 },
+                    { 10, 10, 100 },
+                    { 11, 11, 100 },
+                    { 12, 12, 100 },
+                    { 13, 13, 100 },
+                    { 14, 14, 100 },
+                    { 15, 15, 100 },
+                    { 16, 16, 100 },
+                    { 17, 17, 100 },
+                    { 18, 18, 100 },
+                    { 19, 19, 100 },
+                    { 20, 20, 100 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Brands_Name",
@@ -366,9 +440,9 @@ namespace E_commerceClassLibrary.Migrations
                 column: "ColorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_Name_BrandId",
+                name: "IX_Products_Name_BrandId_ColorId_SizeId",
                 table: "Products",
-                columns: new[] { "Name", "BrandId" },
+                columns: new[] { "Name", "BrandId", "ColorId", "SizeId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(

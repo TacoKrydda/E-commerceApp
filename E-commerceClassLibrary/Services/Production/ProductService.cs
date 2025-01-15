@@ -25,10 +25,10 @@ namespace E_commerceClassLibrary.Services.Production
                 throw new ArgumentException("Entity data is invalid.");
             }
 
-            if (await EntityExistsAsync(product.Name, product.BrandId))
+            if (await EntityExistsAsync(product.Name, product.BrandId, product.ColorId, product.SizeId))
             {
-                _logger.LogWarning("A product with the same name and brand already exists: {ProductName}, {BrandId}", product.Name, product.BrandId);
-                throw new InvalidOperationException("A product with the same name and brand already exists.");
+                _logger.LogWarning("A product with the same name, brand, color, size already exists: {ProductName}, {BrandId}, {ColorId} ,{SizeId}", product.Name, product.BrandId, product.ColorId, product.SizeId);
+                throw new InvalidOperationException("A product with the same name, brand, color, size already exists.");
             }
 
             //using var transaction = await _context.Database.BeginTransactionAsync(); // Startar transaktionen
@@ -41,6 +41,7 @@ namespace E_commerceClassLibrary.Services.Production
                 ColorId = product.ColorId,
                 SizeId = product.SizeId,
                 Price = product.Price,
+                ImagePath = product.ImagePath,
             };
 
             try
@@ -68,14 +69,15 @@ namespace E_commerceClassLibrary.Services.Production
 
                 return new ProductDTO
                 {
-                    Id = entityFromDb.Id,
+                    Id = entityFromDb?.Id ?? 0,
                     Name = entityFromDb?.Name ?? string.Empty,
                     Brand = entityFromDb?.Brand?.Name ?? string.Empty,
                     Category = entityFromDb?.Category?.Name ?? string.Empty,
                     Color = entityFromDb?.Color?.Name ?? string.Empty,
                     Size = entityFromDb?.Size?.Name ?? string.Empty,
-                    Price = entityFromDb.Price,
+                    Price = entityFromDb?.Price ?? 0,
                     Stock = entityFromDb?.Stock?.Quantity ?? 0,
+                    ImagePath = entityFromDb?.ImagePath ?? string.Empty,
                 };
             }
             catch (DbUpdateException ex)
@@ -112,9 +114,9 @@ namespace E_commerceClassLibrary.Services.Production
             }
         }
 
-        public async Task<bool> EntityExistsAsync(string name, int brandId)
+        public async Task<bool> EntityExistsAsync(string name, int brandId, int colorId, int sizeId)
         {
-            return await _context.Products.AnyAsync(p => p.Name == name && p.BrandId == brandId);
+            return await _context.Products.AnyAsync(p => p.Name == name && p.BrandId == brandId && p.ColorId == colorId && p.SizeId == sizeId);
         }
 
         public async Task<ProductDTO> GetProductByIdAsync(int id)
@@ -148,6 +150,7 @@ namespace E_commerceClassLibrary.Services.Production
                     Color = entity.Color?.Name ?? string.Empty,
                     Size = entity.Size?.Name ?? string.Empty,
                     Price = entity.Price,
+                    ImagePath = entity.ImagePath,
                     Stock = entity?.Stock?.Quantity ?? 0,
                 };
             }
@@ -158,36 +161,63 @@ namespace E_commerceClassLibrary.Services.Production
             }
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetProductsAsync()
+        public async Task<IEnumerable<ProductDTO>> GetProductsAsync(
+            string? color,
+            string? size,
+            string? category,
+            string? brand)
         {
-            try
-            {
-                var entity = await _context.Products
-                    .Include(p => p.Brand)
-                    .Include(p => p.Category)
-                    .Include(p => p.Color)
-                    .Include(p => p.Size)
-                    .Include(p => p.Stock)
-                    .ToListAsync();
+            // Basquery för att inkludera nödvändiga relationer
+            var query = _context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .Include(p => p.Color)
+                .Include(p => p.Size)
+                .Include(p => p.Stock)
+                .AsQueryable();
 
-                return entity.Select(p => new ProductDTO
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Brand = p.Brand?.Name ?? string.Empty,
-                    Category = p.Category?.Name ?? string.Empty,
-                    Color = p.Color?.Name ?? string.Empty,
-                    Size = p.Size?.Name ?? string.Empty,
-                    Price = p.Price,
-                    Stock = p.Stock?.Quantity ?? 0
-                }).ToList();
-            }
-            catch (DbException ex)
+            // Lägg till dynamiska filter
+            if (!string.IsNullOrEmpty(color))
             {
-                _logger.LogError(ex, "An error occurred while retrieving the entities.");
-                throw new InvalidOperationException("An error occurred while retrieving the entities.", ex);
+                query = query.Where(p => p.Color.Name == color);
             }
+
+            if (!string.IsNullOrEmpty(size))
+            {
+                query = query.Where(p => p.Size.Name == size);
+            }
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                query = query.Where(p => p.Category.Name == category);
+            }
+
+            if (!string.IsNullOrEmpty(brand))
+            {
+                query = query.Where(p => p.Brand.Name == brand);
+            }
+
+            // Gruppera produkterna och välj första variationen
+            var groupedProducts = await query
+                .GroupBy(p => new { p.Name, p.BrandId, p.CategoryId })
+                .Select(g => g.First())
+                .ToListAsync();
+
+            // Mappa till DTO
+            return groupedProducts.Select(p => new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Brand = p.Brand?.Name ?? string.Empty,
+                Category = p.Category?.Name ?? string.Empty,
+                Color = p.Color?.Name ?? string.Empty,
+                Size = p.Size?.Name ?? string.Empty,
+                Price = p.Price,
+                ImagePath = p.ImagePath,
+                Stock = p.Stock?.Quantity ?? 0
+            }).ToList();
         }
+
 
         public async Task<ProductDTO> UpdateProductAsync(int id, CreateUpdateProductDTO product)
         {
@@ -218,6 +248,7 @@ namespace E_commerceClassLibrary.Services.Production
                 existingEntity.ColorId = product.ColorId;
                 existingEntity.SizeId = product.SizeId;
                 existingEntity.Price = product.Price;
+                existingEntity.ImagePath = product.ImagePath;
                 if (existingEntity.Stock != null)
                 {
                     if (product.StockQuantity < 0)
@@ -248,6 +279,7 @@ namespace E_commerceClassLibrary.Services.Production
                     Color = existingEntity.Color?.Name ?? string.Empty,
                     Size = existingEntity.Size?.Name ?? string.Empty,
                     Price = existingEntity.Price,
+                    ImagePath = existingEntity.ImagePath,
                     Stock = existingEntity.Stock.Quantity
                 };
             }
@@ -255,6 +287,50 @@ namespace E_commerceClassLibrary.Services.Production
             {
                 _logger.LogError(ex, "An error occurred while updating the entity.");
                 throw new InvalidOperationException("An error occurred while updating the entity.", ex);
+            }
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetProductByNameAsync(string name)
+        {
+            if (name == null || string.IsNullOrWhiteSpace(name))
+            {
+                _logger.LogWarning("Invalid entity data provided.");
+                throw new ArgumentException("Entity data is invalid.");
+            }
+
+            try
+            {
+                var entity = await _context.Products
+                    .Include(p => p.Brand)
+                    .Include(p => p.Category)
+                    .Include(p => p.Color)
+                    .Include(p => p.Size)
+                    .Include(p => p.Stock)
+                    .Where(p => p.Name == name)
+                    .ToListAsync();
+
+                if (entity == null)
+                {
+                    _logger.LogWarning("Entity with Name {Name} not found.", name);
+                    throw new KeyNotFoundException($"Entity with Name {name} not found.");
+                }
+                return entity.Select(p => new ProductDTO
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Brand = p.Brand?.Name ?? string.Empty,
+                    Category = p.Category?.Name ?? string.Empty,
+                    Color = p.Color?.Name ?? string.Empty,
+                    Size = p.Size?.Name ?? string.Empty,
+                    Price = p.Price,
+                    ImagePath = p.ImagePath,
+                    Stock = p?.Stock?.Quantity ?? 0,
+                });
+            }
+            catch (DbException ex)
+            {
+                _logger.LogError(ex, "An error occurred while retrieving the entity.");
+                throw new InvalidOperationException("An error occurred while retrieving the entity.", ex);
             }
         }
     }

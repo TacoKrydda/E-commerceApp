@@ -47,10 +47,15 @@ namespace E_commerce.Controllers.Production
         }
 
         [HttpGet(Name = "GetProducts")]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProductsAsync()
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts(
+            [FromQuery] string? color,
+            [FromQuery] string? size,
+            [FromQuery] string? category,
+            [FromQuery] string? brand)
         {
-            var entities = await _service.GetProductsAsync();
-            return Ok(entities);
+            var products = await _service.GetProductsAsync(color, size, category, brand);
+
+            return Ok(products);
         }
 
         [HttpPut("{id}", Name = "PutProduct")]
@@ -63,5 +68,17 @@ namespace E_commerce.Controllers.Production
             }
             return Ok(entity);
         }
+
+        [HttpGet("by-name", Name = "GetProductByName")]
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProductByName(string name)
+        {
+            var entities = await _service.GetProductByNameAsync(name);
+            if (entities == null || !entities.Any())
+            {
+                return NotFound();
+            }
+            return Ok(entities);
+        }
+
     }
 }

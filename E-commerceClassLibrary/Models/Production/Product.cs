@@ -24,6 +24,7 @@ namespace E_commerceClassLibrary.Models.Production
                 _price = value;
             }
         }
+        public string ImagePath { get; set; } = string.Empty;
 
         [JsonIgnore]
         public Brand? Brand { get; set; }

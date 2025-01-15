@@ -1,18 +1,18 @@
 :root {
-  --gap-sml: 0.625;
+  --gap-medium: 0.625;
 }
 
-.filter {
+.section {
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto; /* Horisontell scrollning */
-  gap: var(--gap-sml);
+  gap: var(--gap-medium);
   box-sizing: border-box;
   border: 0;
 
   @media (min-width: 48rem) {
     flex-wrap: wrap;
-    overflow-x: unset;
+    overflow-x: visible;
     justify-content: space-evenly;
   }
 }

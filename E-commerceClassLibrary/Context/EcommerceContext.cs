@@ -211,7 +211,7 @@ namespace E_commerceClassLibrary.Context
                 .IsUnique();
 
             modelBuilder.Entity<Product>()
-                .HasIndex(p => new { p.Name, p.BrandId })
+                .HasIndex(p => new { p.Name, p.BrandId, p.ColorId, p.SizeId })
                 .IsUnique();
 
             modelBuilder.Entity<Size>()
@@ -299,52 +299,480 @@ namespace E_commerceClassLibrary.Context
             #region Production
 
             modelBuilder.Entity<Brand>()
-                .HasData(new Brand
+                .HasData(
+                new Brand
                 {
                     Id = 1,
-                    Name = "Brand 1"
-                });
+                    Name = "Line Art"
+                },
+                new Brand
+                {
+                    Id = 2,
+                    Name = "Dalle"
+                }
+                );
 
             modelBuilder.Entity<Category>()
-                .HasData(new Category
+                .HasData(
+                new Category
                 {
                     Id = 1,
-                    Name = "Category 1"
-                });
+                    Name = "T-Shirt"
+                },
+                new Category
+                {
+                    Id = 2,
+                    Name = "Pants"
+                },
+                new Category
+                {
+                    Id = 3,
+                    Name = "Jacket"
+                },
+                new Category
+                {
+                    Id = 4,
+                    Name = "Hoodie"
+                },
+                new Category
+                {
+                    Id = 5,
+                    Name = "Underwear"
+                }
+                );
 
             modelBuilder.Entity<Color>()
-                .HasData(new Color
+                .HasData(
+                new Color
                 {
                     Id = 1,
-                    Name = "Color 1"
-                });
+                    Name = "Red"
+                },
+                new Color
+                {
+                    Id = 2,
+                    Name = "Green"
+                },
+                new Color
+                {
+                    Id = 3,
+                    Name = "Blue"
+                },
+                new Color
+                {
+                    Id = 4,
+                    Name = "White"
+                }
+                );
 
             modelBuilder.Entity<Size>()
-                .HasData(new Size
+                .HasData(
+                new Size
                 {
                     Id = 1,
-                    Name = "Size 1"
-                });
+                    Name = "S"
+                },
+                new Size
+                {
+                    Id = 2,
+                    Name = "M"
+                },
+                new Size
+                {
+                    Id = 3,
+                    Name = "L"
+                },
+                new Size
+                {
+                    Id = 4,
+                    Name = "XL"
+                }
+                );
 
             modelBuilder.Entity<Product>()
-                .HasData(new Product
+                .HasData(
+                new Product
                 {
                     Id = 1,
-                    Name = "Product 1",
+                    Name = "Line Art Shirt",
                     BrandId = 1,
                     CategoryId = 1,
                     ColorId = 1,
                     SizeId = 1,
-                    Price = 1499.99m
-                });
+                    Price = 1499.99m,
+                    ImagePath = "images/ShirtRed.png"
+                },
+                new Product
+                {
+                    Id = 2,
+                    Name = "Line Art Shirt",
+                    BrandId = 1,
+                    CategoryId = 1,
+                    ColorId = 2,
+                    SizeId = 1,
+                    Price = 1499.99m,
+                    ImagePath = "images/ShirtGreen.png"
+                },
+                new Product
+                {
+                    Id = 3,
+                    Name = "Line Art Shirt",
+                    BrandId = 1,
+                    CategoryId = 1,
+                    ColorId = 3,
+                    SizeId = 1,
+                    Price = 1499.99m,
+                    ImagePath = "images/ShirtBlue.png"
+                },
+                new Product
+                {
+                    Id = 4,
+                    Name = "Line Art Pants",
+                    BrandId = 1,
+                    CategoryId = 2,
+                    ColorId = 1,
+                    SizeId = 1,
+                    Price = 1099.99m,
+                    ImagePath = "images/PantsRed.png"
+                },
+                new Product
+                {
+                    Id = 5,
+                    Name = "Line Art Pants",
+                    BrandId = 1,
+                    CategoryId = 2,
+                    ColorId = 2,
+                    SizeId = 1,
+                    Price = 1099.99m,
+                    ImagePath = "images/PantsGreen.png"
+                },
+                new Product
+                {
+                    Id = 6,
+                    Name = "Line Art Pants",
+                    BrandId = 1,
+                    CategoryId = 2,
+                    ColorId = 3,
+                    SizeId = 1,
+                    Price = 1099.99m,
+                    ImagePath = "images/PantsBlue.png"
+                },
+                new Product
+                {
+                    Id = 7,
+                    Name = "Line Art Jacket",
+                    BrandId = 1,
+                    CategoryId = 3,
+                    ColorId = 1,
+                    SizeId = 1,
+                    Price = 2499.99m,
+                    ImagePath = "images/JacketRed.png"
+                },
+                new Product
+                {
+                    Id = 8,
+                    Name = "Line Art Jacket",
+                    BrandId = 1,
+                    CategoryId = 3,
+                    ColorId = 2,
+                    SizeId = 1,
+                    Price = 2499.99m,
+                    ImagePath = "images/JacketGreen.png"
+                },
+                new Product
+                {
+                    Id = 9,
+                    Name = "Line Art Jacket",
+                    BrandId = 1,
+                    CategoryId = 3,
+                    ColorId = 3,
+                    SizeId = 1,
+                    Price = 2499.99m,
+                    ImagePath = "images/JacketBlue.png"
+                },
+                new Product
+                {
+                    Id = 10,
+                    Name = "Line Art Hoodie",
+                    BrandId = 1,
+                    CategoryId = 4,
+                    ColorId = 1,
+                    SizeId = 1,
+                    Price = 1899.99m,
+                    ImagePath = "images/HoodieRed.png"
+                },
+                new Product
+                {
+                    Id = 11,
+                    Name = "Line Art Hoodie",
+                    BrandId = 1,
+                    CategoryId = 4,
+                    ColorId = 2,
+                    SizeId = 1,
+                    Price = 1899.99m,
+                    ImagePath = "images/HoodieGreen.png"
+                },
+                new Product
+                {
+                    Id = 12,
+                    Name = "Line Art Hoodie",
+                    BrandId = 1,
+                    CategoryId = 4,
+                    ColorId = 3,
+                    SizeId = 1,
+                    Price = 1899.99m,
+                    ImagePath = "images/HoodieBlue.png"
+                },
+                new Product
+                {
+                    Id = 13,
+                    Name = "Dalle Hoodie",
+                    BrandId = 2,
+                    CategoryId = 4,
+                    ColorId = 4,
+                    SizeId = 1,
+                    Price = 777m,
+                    ImagePath = "images/DallHoodie.webp"
+                },
+                new Product
+                {
+                    Id = 14,
+                    Name = "Dalle Hoodie",
+                    BrandId = 2,
+                    CategoryId = 4,
+                    ColorId = 4,
+                    SizeId = 2,
+                    Price = 777m,
+                    ImagePath = "images/DallHoodie.webp"
+                },
+                new Product
+                {
+                    Id = 15,
+                    Name = "Dalle Hoodie",
+                    BrandId = 2,
+                    CategoryId = 4,
+                    ColorId = 4,
+                    SizeId = 3,
+                    Price = 777m,
+                    ImagePath = "images/DallHoodie.webp"
+                },
+                new Product
+                {
+                    Id = 16,
+                    Name = "Dalle Hoodie",
+                    BrandId = 2,
+                    CategoryId = 4,
+                    ColorId = 4,
+                    SizeId = 4,
+                    Price = 777m,
+                    ImagePath = "images/DallHoodie.webp"
+                },
+                new Product
+                {
+                    Id = 17,
+                    Name = "Dalle Jacket",
+                    BrandId = 2,
+                    CategoryId = 3,
+                    ColorId = 4,
+                    SizeId = 3,
+                    Price = 777m,
+                    ImagePath = "images/DallJacket.webp"
+                },
+                new Product
+                {
+                    Id = 18,
+                    Name = "Dalle Pants",
+                    BrandId = 2,
+                    CategoryId = 2,
+                    ColorId = 4,
+                    SizeId = 2,
+                    Price = 777m,
+                    ImagePath = "images/DallPants.webp"
+                },
+                new Product
+                {
+                    Id = 19,
+                    Name = "Dalle Shirt",
+                    BrandId = 2,
+                    CategoryId = 1,
+                    ColorId = 4,
+                    SizeId = 2,
+                    Price = 777m,
+                    ImagePath = "images/DallShirt.webp"
+                },
+                new Product
+                {
+                    Id = 20,
+                    Name = "Fun Time",
+                    BrandId = 2,
+                    CategoryId = 5,
+                    ColorId = 4,
+                    SizeId = 2,
+                    Price = 999m,
+                    ImagePath = "images/pngwing.png"
+                }, new Product
+                {
+                    Id = 21,
+                    Name = "Line Art Shirt",
+                    BrandId = 1,
+                    CategoryId = 1,
+                    ColorId = 1,
+                    SizeId = 2,
+                    Price = 1499.99m,
+                    ImagePath = "images/ShirtRed.png"
+                },
+                new Product
+                {
+                    Id = 22,
+                    Name = "Line Art Shirt",
+                    BrandId = 1,
+                    CategoryId = 1,
+                    ColorId = 2,
+                    SizeId = 2,
+                    Price = 1499.99m,
+                    ImagePath = "images/ShirtGreen.png"
+                },
+                new Product
+                {
+                    Id = 23,
+                    Name = "Line Art Shirt",
+                    BrandId = 1,
+                    CategoryId = 1,
+                    ColorId = 3,
+                    SizeId = 2,
+                    Price = 1499.99m,
+                    ImagePath = "images/ShirtBlue.png"
+                },
+                new Product
+                {
+                    Id = 24,
+                    Name = "Line Art Pants",
+                    BrandId = 1,
+                    CategoryId = 2,
+                    ColorId = 1,
+                    SizeId = 2,
+                    Price = 1099.99m,
+                    ImagePath = "images/PantsRed.png"
+                }
+                );
 
             modelBuilder.Entity<Stock>()
-                .HasData(new Stock
+                .HasData(
+                new Stock
                 {
                     Id = 1,
                     ProductId = 1,
                     Quantity = 100,
-                });
+                },
+                new Stock
+                {
+                    Id = 2,
+                    ProductId = 2,
+                    Quantity = 100,
+                }, new Stock
+                {
+                    Id = 3,
+                    ProductId = 3,
+                    Quantity = 100,
+                }, new Stock
+                {
+                    Id = 4,
+                    ProductId = 4,
+                    Quantity = 100,
+                }, new Stock
+                {
+                    Id = 5,
+                    ProductId = 5,
+                    Quantity = 100,
+                }, new Stock
+                {
+                    Id = 6,
+                    ProductId = 6,
+                    Quantity = 100,
+                }, new Stock
+                {
+                    Id = 7,
+                    ProductId = 7,
+                    Quantity = 100,
+                }, new Stock
+                {
+                    Id = 8,
+                    ProductId = 8,
+                    Quantity = 100,
+                },
+                new Stock
+                {
+                    Id = 9,
+                    ProductId = 9,
+                    Quantity = 100,
+                },
+                new Stock
+                {
+                    Id = 10,
+                    ProductId = 10,
+                    Quantity = 100,
+                },
+                new Stock
+                {
+                    Id = 11,
+                    ProductId = 11,
+                    Quantity = 100,
+                },
+                new Stock
+                {
+                    Id = 12,
+                    ProductId = 12,
+                    Quantity = 100,
+                },
+                new Stock
+                {
+                    Id = 13,
+                    ProductId = 13,
+                    Quantity = 100,
+                },
+                new Stock
+                {
+                    Id = 14,
+                    ProductId = 14,
+                    Quantity = 100,
+                },
+                new Stock
+                {
+                    Id = 15,
+                    ProductId = 15,
+                    Quantity = 100,
+                },
+                new Stock
+                {
+                    Id = 16,
+                    ProductId = 16,
+                    Quantity = 100,
+                },
+                new Stock
+                {
+                    Id = 17,
+                    ProductId = 17,
+                    Quantity = 100,
+                },
+                new Stock
+                {
+                    Id = 18,
+                    ProductId = 18,
+                    Quantity = 100,
+                },
+                new Stock
+                {
+                    Id = 19,
+                    ProductId = 19,
+                    Quantity = 100,
+                },
+                new Stock
+                {
+                    Id = 20,
+                    ProductId = 20,
+                    Quantity = 100,
+                }
+                );
 
             #endregion
 
